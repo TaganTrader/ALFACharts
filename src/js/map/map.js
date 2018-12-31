@@ -8,9 +8,11 @@ class Map {
         /*axios.get("http://icqpay.ru").then((data) => {
             console.log(data);
         })*/
-        
+
     }
 
 }
+
+import "./map.styl";
 
 export default Map;
