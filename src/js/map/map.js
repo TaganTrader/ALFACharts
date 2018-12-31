@@ -8,6 +8,7 @@ class Map {
         /*axios.get("http://icqpay.ru").then((data) => {
             console.log(data);
         })*/
+        
     }
 
 }

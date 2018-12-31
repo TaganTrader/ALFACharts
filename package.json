@@ -4,8 +4,9 @@
   "description": "Charts",
   "main": "index.js",
   "scripts": {
+    "dev": "yarn run build -- --watch",
     "build": "webpack --mode production --config configs/webpack.prod.config.js -env.PLATFORM=production --env.VERSION=1",
-    "dev": "webpack-dev-server --mode development --open --config configs/webpack.base.config.js -env.PLATFORM=development --env.VERSION=1"
+    "dev-serve": "webpack-dev-server --mode development --open --config configs/webpack.base.config.js -env.PLATFORM=development --env.VERSION=1"
   },
   "author": "ALFA",
   "license": "MIT",
