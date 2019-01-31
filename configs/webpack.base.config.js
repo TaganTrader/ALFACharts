@@ -41,6 +41,7 @@ module.exports = env => {
 
             module: {
                 rules: [
+                    { parser: { amd: false } },                
                     {
                         test: /\.js$/,
                         exclude: "/node_modules/",
