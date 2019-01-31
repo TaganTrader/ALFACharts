@@ -28,7 +28,7 @@ let theme = {
             buy: {
                 lines: "rgba(102, 204, 102, 1)",
                 label: "rgba(102, 204, 102, 0.3)",
-                label_text: "rgba(255, 255, 255)",
+                label_text: "rgba(0, 0, 0)",
                 price_text:  "rgba(0, 0, 0, 1)",
             },
             sell: {
@@ -43,7 +43,7 @@ let theme = {
             long: {
                 lines: "rgba(102, 204, 102, 1)",
                 label: "rgba(102, 204, 102, 1)",
-                label_text: "rgba(255, 255, 255)",
+                label_text: "rgba(0, 0, 0)",
                 price_text:  "rgba(0, 0, 0, 1)",
             },
             short: {

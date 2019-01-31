@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="/assets/common.css" />
 
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+
     <style>
         html, body {
             padding: 0;
@@ -112,23 +114,30 @@
 
 
             function updateData2(cycle) {
-                $.get('https://www.bitmex.com/api/v1/trade/bucketed?binSize=1m&partial=true&symbol=XBTUSD&count=100&reverse=false', function (data) {
+                $.get('https://cors.io/?https://www.bitmex.com/api/v1/trade/bucketed?binSize=1m&partial=true&symbol=XBTUSD&count=500&reverse=true', function (data) {
+                    //console.log(data);
                     let candles = [];
                     try {
                         candles = JSON.parse(data);
 
                     } catch (e) {
-                        /*if (cycle)	
+                        /*if (cycle)
                             setTimeout(function () { updateData(true) }, 300);*/
                         return;
                     }
                     chart.dataProvider.data = candles;
+                    chart.layer.orders.data = [];
+                    chart.layer.positions.data = [{
+                        currentQty: 15000,
+                        avgEntryPrice: 3411.5,
+                    }];
                     chart.layer.draw();
-                }); 
+                });
 
             }
 
-        //setInterval(() => { updateData(true); }, 1000);
+        updateData2(true);
+        setInterval(() => { updateData2(true); }, 5000);
 
         var chart = new ALFAChart("ALFAChartDemo", {
             theme: "DefaultDark",            
