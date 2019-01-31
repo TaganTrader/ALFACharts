@@ -1,15 +1,24 @@
 .ac_workarea
-    width: 100%;
-    height: 100%;
-    display: inline-block;
-    border-right: 5px solid #3D3C35
+    width 100%
+    height 100%
+    padding 0
+    margin 0
+    display inline-block    
+    font-family "Exo 2"
     
-.ac_workarea div.ac_chart 
-    width: 100%; 
-    position: relative;
+    div.ac_chart 
+        width: 100%
+        position relative
+        cursor crosshair
 
-.ac_workarea div.ac_chart canvas 
-    position: absolute; 
-    left: 0; 
-    top: 0; 
-    cursor: crosshair;
+        canvas 
+            position absolute
+            left 0
+            top 0
+            
+
+    .ac_chart_cur_grabbing
+        cursor grabbing !important
+
+    .ac_chart_cur_n-resize
+        cursor n-resize !important

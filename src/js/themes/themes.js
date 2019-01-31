@@ -1,7 +1,9 @@
 import DefaultDark from "./DefaultDark"
+import DefaultWhite from "./DefaultWhite"
 
 let themes = {};
 themes["DefaultDark"] = DefaultDark;
+themes["DefaultWhite"] = DefaultWhite;
 
 class Theme {
 

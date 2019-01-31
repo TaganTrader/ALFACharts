@@ -11,11 +11,12 @@
         html, body {
             padding: 0;
             margin: 0;
+            height: 100%
         }
 
         #ALFAChartDemo {
-            width: 500px;
-            height: 300px;
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
@@ -25,8 +26,113 @@
     <script src="/assets/app.js"></script>
 
     <script>
+        var dataSource = "127.0.0.1:8081";
+        dataSource = "80.87.201.226:8081";
+        var delta_g = 0;
+
+        function updateData(cycle) {
+                $.get('http://' + dataSource + '/candles', function (data) {
+                    let candles = [];
+                    try {
+                        candles = JSON.parse(data);
+
+                    } catch (e) {
+                        /*if (cycle)	
+                            setTimeout(function () { updateData(true) }, 300);*/
+                        return;
+                    }
+
+                    let data_arr = [];
+                    let data_arr_0 = [];
+
+                    if (delta_g < 0)
+                        for (let i = delta_g; i <= 0; i++) {
+                            let candle = {
+                                o: 1,
+                                c: 1,
+                                h: 1,
+                                l: 1,
+                                t: new Date(new Date(candles[0].timestamp).getTime() - (new Date(candles[0].timestamp).getTime() - new Date(candles[1].timestamp).getTime()) * (i))
+                            };
+                            data_arr.unshift(candle);
+                            data_arr_0.unshift(candle);
+                        }
+                    for (let i = Math.max(0, delta_g); i < candles.length; i++) {
+                        let candle = {
+                            o: candles[i].open,
+                            c: candles[i].close,
+                            h: candles[i].high,
+                            l: candles[i].low,
+                            t: candles[i].timestamp
+                        };
+                        data_arr_0.unshift(candle);
+                        //console.log(candles[i].ratio);
+                    }
+
+
+
+                    // Load data
+                    //dojichart_0.loadData(data_arr_0, 'XBTUSD', 'M1');
+
+                    for (let i = Math.max(0, delta_g); i < candles.length; i++) {
+                        let open = candles[i].open + (i > 0 ? candles[i - 1].close : 0);
+                        let close = -candles[i].close + (i > 0 ? candles[i - 1].close : 0);
+                        let high = Math.max(open, close) + (candles[i].high - Math.max(candles[i].open, candles[i].close));
+                        let low = Math.min(open, close) - (Math.min(candles[i].open, candles[i].close) - candles[i].low);
+                        let candle = {
+                            close: close,
+                            open: open,
+                            high: high,
+                            low: low,
+                            timestamp: candles[i].timestamp
+                        };
+
+                        candles[i].open = open;
+                        candles[i].close = close;
+                        candles[i].high = high;
+                        candles[i].low = low;
+                        data_arr.push(candle);
+                        //console.log(candles[i].ratio);
+                    }
+                    // Load data
+                    //dojichart.loadData(data_arr, 'XBTUSD', 'M1');
+                    for (let i = 0; i < data_arr.length; i++) {
+                        let o = data_arr[i].open;
+                        data_arr[i].open = data_arr[i].close;
+                        data_arr[i].close = o;
+                        data_arr[i].high = Math.max(data_arr[i].high, data_arr[i].open, data_arr[i].close, data_arr[i].low)
+                        data_arr[i].low = Math.min(data_arr[i].high, data_arr[i].open, data_arr[i].close, data_arr[i].low)
+                    }
+                    chart.dataProvider.data = data_arr;
+                    chart.layer.draw();
+
+                });
+
+            }
+
+
+            function updateData2(cycle) {
+                $.get('https://www.bitmex.com/api/v1/trade/bucketed?binSize=1m&partial=true&symbol=XBTUSD&count=100&reverse=false', function (data) {
+                    let candles = [];
+                    try {
+                        candles = JSON.parse(data);
+
+                    } catch (e) {
+                        /*if (cycle)	
+                            setTimeout(function () { updateData(true) }, 300);*/
+                        return;
+                    }
+                    chart.dataProvider.data = candles;
+                    chart.layer.draw();
+                });
+
+            }
+
+        //setInterval(() => { updateData(true); }, 1000);
+
         var chart = new ALFAChart("ALFAChartDemo", {
-            theme: "DefaultDark"
+            theme: "DefaultWhite",
+            inverseCandles: true
         });
     </script>
 

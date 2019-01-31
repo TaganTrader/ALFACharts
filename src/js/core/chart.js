@@ -5,6 +5,9 @@ const EventEmitter = require("events").EventEmitter;
 
 import Theme from "../themes/themes"
 import Crosshair from "./crosshairs"
+import CandleLayer from "../layers/candle_layer"
+import DataProvider from "../data_provider/data_provider"
+
 
 const default_config = {
     width: "auto",
@@ -16,9 +19,12 @@ class ALFAChart extends EventEmitter {
         super();
         this.el = $("#" + el_id);
         this.config = _.extend({}, default_config, config);
+    
+        this.offsetWidth = 0;
+        this.offsetHeight = 0;
 
         this.theme = new Theme(this.config.theme);
-        this._init();
+        this._init();        
     }    
 
     _init () {
@@ -39,7 +45,12 @@ class ALFAChart extends EventEmitter {
         this._resize();
         this.clear();
 
-        this.crosshair = new Chrosshair(this);
+        this.dataProvider = new DataProvider();
+        this.layer = new CandleLayer(this);        
+        this.crosshair = new Crosshair(this);
+
+        this._autorefresh()
+        setInterval(() => { this._autorefresh() }, 300);
     }
 
     clear () {
@@ -58,7 +69,14 @@ class ALFAChart extends EventEmitter {
         this.canvas.height = height;
 
         this.linen.width = width;
-        this.linen.height = height;
+        this.linen.height = height;        
+
+        this.offsetWidth = width;
+        this.offsetHeight = height;        
+    }
+
+    _autorefresh() {
+        this.layer.draw();
     }
 }
 

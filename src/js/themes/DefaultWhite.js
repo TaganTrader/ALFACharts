@@ -1,11 +1,11 @@
 "use strict";
 
 let theme = {
-    name: "DefaultDark",
+    name: "DefaultWhite",
     colors: {
-        workarea_bg: "#363636",        
-        axe_lines: "#3C3C3C",
-        axe_texts: "rgba(255, 255, 255, 0.3)",
+        workarea_bg: "#FFF",        
+        axe_lines: "#F5F5F5",
+        axe_texts: "rgba(0, 0, 0, 0.6)",
 
         candles: {
             bull: {
@@ -20,21 +20,21 @@ let theme = {
             }
         },
 
-        crosshair_lines: "rgba(255, 255, 255, 0.3)",
+        crosshair_lines: "rgba(0, 0, 0, 0.3)",
         crosshair_price: "rgba(255, 255, 255, 1)",
         crosshair_price_bg: "rgba(100, 100, 100, 0.9)",
 
         orders: {
             buy: {
                 lines: "rgba(102, 204, 102, 1)",
-                label: "rgba(102, 204, 102, 0.3)",
-                label_text: "rgba(255, 255, 255)",
+                label: "rgba(102, 204, 102, 0.5)",
+                label_text: "rgba(0, 0, 0)",
                 price_text:  "rgba(0, 0, 0, 1)",
             },
             sell: {
                 lines: "rgba(237, 104, 74, 1)",
-                label: "rgba(237, 104, 74, 0.3)",
-                label_text: "rgba(255, 255, 255)",
+                label: "rgba(237, 104, 74, 0.5)",
+                label_text: "rgba(0, 0, 0)",
                 price_text:  "rgba(255, 255, 255, 1)",
             }
         }
