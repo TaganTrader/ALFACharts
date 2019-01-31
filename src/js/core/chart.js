@@ -1,6 +1,7 @@
 "use strict";
 
 const lodash = require("lodash");
+lodash.noConflict();
 const EventEmitter = require("events").EventEmitter;
 
 import Theme from "../themes/themes"
