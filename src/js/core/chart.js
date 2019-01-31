@@ -1,6 +1,6 @@
 "use strict";
 
-//const _ = require("lodash");
+const lodash = require("lodash");
 const EventEmitter = require("events").EventEmitter;
 
 import Theme from "../themes/themes"
@@ -18,7 +18,7 @@ class ALFAChart extends EventEmitter {
     constructor (el_id, config) {
         super();
         this.el = $("#" + el_id);
-        this.config = _.extend({}, default_config, config);
+        this.config = lodash.extend({}, default_config, config);
     
         this.offsetWidth = 0;
         this.offsetHeight = 0;
