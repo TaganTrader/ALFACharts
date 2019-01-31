@@ -32,6 +32,7 @@ class Positions
 
 
         for (let i = 0; i < positions.length; i++) {
+            if (!positions[i] || positions[i].avgEntryPrice == null || positions[i].currentQty == 0) continue;
             let color = "";
             let y = layer.priceToCoords(positions[i].avgEntryPrice);
             if (positions[i].currentQty > 0) {
