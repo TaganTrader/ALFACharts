@@ -62,7 +62,7 @@ class Layer {
         let chart = this.parent;
         let offsetX = e.offsetX * chart.ratio;
         let offsetY = e.offsetY * chart.ratio;
-        
+
         this.mouseX = offsetX;
         this.mouseY = offsetY;
 
@@ -159,7 +159,7 @@ class Layer {
 
     _init () {
         let chart = this.parent;     
-        this.scrollX = -chart.offsetWidth * 0.1;
+        this.scrollX = -60;
         this.scrollY = 0;
         this.mouseX = 0;
         this.mouseY = 0;
