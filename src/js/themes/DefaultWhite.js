@@ -37,6 +37,21 @@ let theme = {
                 label_text: "rgba(0, 0, 0)",
                 price_text:  "rgba(255, 255, 255, 1)",
             }
+        },
+
+        positions: {
+            long: {
+                lines: "rgba(102, 204, 102, 1)",
+                label: "rgba(102, 204, 102, 1)",
+                label_text: "rgba(255, 255, 255)",
+                price_text:  "rgba(0, 0, 0, 1)",
+            },
+            short: {
+                lines: "rgba(237, 104, 74, 1)",
+                label: "rgba(237, 104, 74, 1)",
+                label_text: "rgba(255, 255, 255)",
+                price_text:  "rgba(255, 255, 255, 1)",
+            }
         }
 
     }
