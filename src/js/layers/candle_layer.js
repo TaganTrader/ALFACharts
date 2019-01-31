@@ -30,7 +30,7 @@ class CandleLayer {
             time_axe:  new TimeAxe(this)
         }
 
-        this.layer.now = this.dataProvider.data[0].close;
+        this.layer.now = this.dataProvider.data.length > 0 ? this.dataProvider.data[0].close : 0;
 
         this.autosize = this.config.autosize;
         if (this.autosize)
@@ -46,12 +46,10 @@ class CandleLayer {
         if (from < 0) {
             count += from;
             from = 0;
-        }
+        }        
         if (from > data.length - 1) from = data.length - 1;
         let min = data[from].low;
         let max = data[from].high;
-
-       
 
         for (let i = from + 1; i < from + count && i < data.length; i++) {
             min = Math.min(data[i].low, min);
@@ -65,6 +63,8 @@ class CandleLayer {
         let chart = this.parent;
         let framesAmount = Math.floor(chart.offsetWidth / this.layer.frameWidth);
         
+        if (this.dataProvider.data.length == 0) return;
+
         let extremums = this.extremums(Math.round(this.layer.scrollX / this.layer.frameWidth), framesAmount);
         
         let price_height = extremums.max - extremums.min;
@@ -97,7 +97,6 @@ class CandleLayer {
 
         let last_zero = 0;
         
-
         for (let i = 0; i < data.length; i++) {
             let open = Math.round(this.priceToCoords(data[i].open) + scrollY);
             let close = Math.round(this.priceToCoords(data[i].close) + scrollY);            
