@@ -22,7 +22,8 @@ module.exports = env => {
                 new ExtractTextPlugin("common.css"),
                 new webpack.ProvidePlugin({
                     axios: 'axios',
-                    $: 'jquery'
+                    $: 'jquery',
+                    _: 'lodash'
                 })
             ],
 

@@ -4,6 +4,6 @@ window.ALFAChart = ALFAChart;
 
 
 // temp for delete
-//window.$ = $;
+//window.$ = $; 
 
 import '../css/chart.styl';
