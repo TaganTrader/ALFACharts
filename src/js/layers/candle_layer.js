@@ -5,6 +5,7 @@ import PriceAxe from '../axis/price_axe'
 import TimeAxe from '../axis/time_axe'
 import Orders from '../trading/orders';
 import lodash from 'lodash';
+import Positions from '../trading/positions';
 
 const default_config = {
     frameWidth: 12,
@@ -38,8 +39,8 @@ class CandleLayer {
             this.autosize_layer();
 
 
-        this.orders = new Orders(this, this.dataProvider.orders);        
-
+        this.orders = new Orders(this, this.dataProvider.orders);   
+        this.positions = new Positions(this, this.dataProvider.positions);
     }
 
     extremums (from, count) {
@@ -198,6 +199,7 @@ class CandleLayer {
         this.axis.price_axe.draw(ctx, theme);
         this.draw_candles(ctx, theme);
         this.orders.draw(ctx, theme);
+        this.positions.draw(ctx, theme);
         this.parent.crosshair.draw(ctx, this.layer, theme);
     }
 

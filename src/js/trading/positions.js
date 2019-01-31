@@ -23,12 +23,12 @@ class Positions
 
         ctx.setLineDash([0]);
 
-        ctx.beginPath();
+        ctx.beginPath(); 
 
         ctx.textAlign = "center"; 
         ctx.textBaseline = "middle";
         ctx.font = '12px "EXO 2"';
-        ctx.setLineDash([5,1]);
+        ctx.setLineDash([10,1]);
 
 
         for (let i = 0; i < positions.length; i++) {
@@ -51,16 +51,16 @@ class Positions
                 ctx.fillStyle = theme.colors.positions.long.label;
                 ctx.fillRect(
                     x, 
-                    y + scrollY, 
+                    y + scrollY - 12, 
                     70, 
                     24);
 
-                ctx.fillStyle = theme.colors.positions.buy.label_text;
+                ctx.fillStyle = theme.colors.positions.long.label_text;
                 let text = (positions[i].currentQty).toLocaleString(); 
-                ctx.fillText(text, x + 35, scrollY + y + 12, 65);
+                ctx.fillText(text, x + 35, scrollY + y, 65);
             
             } else {
-                color = theme.colors.positions.sell.lines;
+                color = theme.colors.positions.short.lines;
                 ctx.beginPath();
                 ctx.strokeStyle = color;
                 ctx.lineWidth = 1;
@@ -71,16 +71,16 @@ class Positions
                 ctx.lineTo(w, Math.round(y + scrollY) + .5);
                 ctx.stroke();
 
-                ctx.fillStyle = theme.colors.positions.sell.label;
+                ctx.fillStyle = theme.colors.positions.short.label;
                 ctx.fillRect(
                     x, 
-                    y + scrollY - 24, 
+                    y + scrollY - 12, 
                     70, 
                     24);
                 
-                ctx.fillStyle = theme.colors.positions.sell.label_text;
+                ctx.fillStyle = theme.colors.positions.short.label_text;
                 let text = (positions[i].currentQty).toLocaleString(); 
-                ctx.fillText(text, x + 35, scrollY + y - 12, 65);
+                ctx.fillText(text, x + 35, scrollY + y, 65);
             }
 
             ctx.textAlign = "center"; 

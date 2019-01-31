@@ -107,6 +107,8 @@ class Layer {
     }
 
     _mouseleave(e) {
+        this.mouseX = -100;
+        this.mouseY = -100;
         this.mouse_in = false;
         this.mousedowned = false;
         this.draw();
@@ -161,8 +163,8 @@ class Layer {
         let chart = this.parent;     
         this.scrollX = -60;
         this.scrollY = 0;
-        this.mouseX = 0;
-        this.mouseY = 0;
+        this.mouseX = -100;
+        this.mouseY = -100;
         this.mouse_in = false;
         this.mousedowned = false;
         this.now = 0;

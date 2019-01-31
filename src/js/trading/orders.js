@@ -28,7 +28,7 @@ class Orders
         ctx.textAlign = "center"; 
         ctx.textBaseline = "middle";
         ctx.font = '12px "EXO 2"';
-        ctx.setLineDash([5,1]);
+        ctx.setLineDash([5, 1]);
 
 
         for (let i in orders) {
