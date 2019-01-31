@@ -1,5 +1,7 @@
 "use strict";
 
+import lodash from 'lodash';
+
 const default_config = {
     frameWidth: 12,
     frameHeight: 8,
@@ -9,7 +11,7 @@ const default_config = {
 class Layer {
 
     constructor (parent, config) {
-        config = _.extend({}, default_config, config);
+        config = lodash.extend({}, default_config, config);
         this.config = config;
         this.parent = parent;
 
@@ -32,6 +34,9 @@ class Layer {
 
     _mousedown(e) {
         let chart = this.parent;
+        let offsetX = e.offsetX * chart.ratio;
+        let offsetY = e.offsetY * chart.ratio;
+
         if (e.offsetX <= chart.offsetWidth - this.price_axe_width)
             $(chart.linen).parent().addClass('ac_chart_cur_grabbing');
         else
@@ -39,8 +44,8 @@ class Layer {
     
 
         this.mousedowned = true;
-        this.baseMouseX = e.offsetX - this.scrollX;
-        this.baseMouseY = e.offsetY - this.scrollY;
+        this.baseMouseX = offsetX - this.scrollX;
+        this.baseMouseY = offsetY - this.scrollY;
         this.baseScrollX = this.scrollX;
         this.baseFrameHeight = this.frameHeight;
     }
@@ -55,13 +60,16 @@ class Layer {
 
     _mousemove(e) {
         let chart = this.parent;
-        this.mouseX = e.offsetX;
-        this.mouseY = e.offsetY;
+        let offsetX = e.offsetX * chart.ratio;
+        let offsetY = e.offsetY * chart.ratio;
+        
+        this.mouseX = offsetX;
+        this.mouseY = offsetY;
 
         if (this.mousedowned) {
             if (this.baseMouseX + this.baseScrollX <= chart.offsetWidth - this.price_axe_width) {     
-                this.scrollX = e.offsetX - this.baseMouseX;
-                this.scrollY = e.offsetY - this.baseMouseY;
+                this.scrollX = offsetX - this.baseMouseX;
+                this.scrollY = offsetY - this.baseMouseY;
 
                 if (this.scrollX < -chart.offsetWidth * 0.9)
                     this.scrollX = -chart.offsetWidth * 0.9
@@ -69,8 +77,8 @@ class Layer {
                 this.parent.layer.autosize = false;
                 let h = chart.offsetHeight;
                 let start = Math.log2(100);                      
-                let delta = (Math.abs(Math.log2(100 + 100 / h * Math.abs(e.offsetY - this.baseMouseY)) ) - start) * 4 + 1;                    
-                if (e.offsetY - this.baseMouseY >= 0) 
+                let delta = (Math.abs(Math.log2(100 + 100 / h * Math.abs(offsetY - this.baseMouseY)) ) - start) * 4 + 1;                    
+                if (offsetY - this.baseMouseY >= 0) 
                     this.frameHeight = this.baseFrameHeight / delta;      
                 else
                     this.frameHeight = this.baseFrameHeight * delta;

@@ -4,6 +4,7 @@ import Layer from './layer'
 import PriceAxe from '../axis/price_axe'
 import TimeAxe from '../axis/time_axe'
 import Orders from '../trading/orders';
+import lodash from 'lodash';
 
 const default_config = {
     frameWidth: 12,
@@ -17,7 +18,7 @@ const default_config = {
 class CandleLayer {
 
     constructor (parent, config) {
-        config = _.extend({}, default_config, config);
+        config = lodash.extend({}, default_config, config);
         this.config = config;
         //super(parent, config);
         this.parent = parent;
