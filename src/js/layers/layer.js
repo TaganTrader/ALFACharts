@@ -48,6 +48,7 @@ class Layer {
         this.baseMouseY = offsetY - this.scrollY;
         this.baseScrollX = this.scrollX;
         this.baseFrameHeight = this.frameHeight;
+        return false;
     }
 
     _doubleclick (e) {
@@ -56,6 +57,7 @@ class Layer {
             this.parent.layer.autosize = true;
         }
         this.draw();
+        return false;
     }
 
     _mousemove(e) {
@@ -104,6 +106,7 @@ class Layer {
         //chart.linen.style.cursor = '';
         $(chart.linen).parent().removeClass('ac_chart_cur_n-resize ac_chart_cur_grabbing');
         this.draw();
+        return false;
     }
 
     _mouseleave(e) {
