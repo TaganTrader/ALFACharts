@@ -1,7 +1,7 @@
 "use strict";
 
 
-class Orders
+class Positions
 {
     constructor (layer, data) {
         this.data = data;
@@ -10,7 +10,7 @@ class Orders
 
     draw(ctx, theme) {
         let layer = this.layer;
-        let orders = this.data;
+        let positions = this.data;
         let tick = layer.tick;
 
         let scrollX = layer.layer.scrollX;
@@ -31,13 +31,12 @@ class Orders
         ctx.setLineDash([5,1]);
 
 
-        for (let i in orders) {
-            if (!orders.hasOwnProperty(i)) continue;
+        for (let i = 0; i < positions.length; i++) {
             let color = "";
-            let y = layer.priceToCoords(orders[i].price);
-            if (orders[i].side == "Buy") {
+            let y = layer.priceToCoords(positions[i].avgEntryPrice);
+            if (positions[i].currentQty > 0) {
 
-                color = theme.colors.orders.buy.lines;
+                color = theme.colors.positions.long.lines;
                 ctx.beginPath();
                 ctx.strokeStyle = color;
                 ctx.lineWidth = 1;
@@ -49,19 +48,19 @@ class Orders
                 ctx.lineTo(w, Math.round(y + scrollY) + .5);
                 ctx.stroke();
 
-                ctx.fillStyle = theme.colors.orders.buy.label;
+                ctx.fillStyle = theme.colors.positions.long.label;
                 ctx.fillRect(
                     x, 
                     y + scrollY, 
                     70, 
                     24);
 
-                ctx.fillStyle = theme.colors.orders.buy.label_text;
-                let text = (orders[i].orderQty).toLocaleString(); 
+                ctx.fillStyle = theme.colors.positions.buy.label_text;
+                let text = (positions[i].currentQty).toLocaleString(); 
                 ctx.fillText(text, x + 35, scrollY + y + 12, 65);
             
             } else {
-                color = theme.colors.orders.sell.lines;
+                color = theme.colors.positions.sell.lines;
                 ctx.beginPath();
                 ctx.strokeStyle = color;
                 ctx.lineWidth = 1;
@@ -72,15 +71,15 @@ class Orders
                 ctx.lineTo(w, Math.round(y + scrollY) + .5);
                 ctx.stroke();
 
-                ctx.fillStyle = theme.colors.orders.sell.label;
+                ctx.fillStyle = theme.colors.positions.sell.label;
                 ctx.fillRect(
                     x, 
                     y + scrollY - 24, 
                     70, 
                     24);
                 
-                ctx.fillStyle = theme.colors.orders.sell.label_text;
-                let text = (orders[i].orderQty).toLocaleString(); 
+                ctx.fillStyle = theme.colors.positions.sell.label_text;
+                let text = (positions[i].currentQty).toLocaleString(); 
                 ctx.fillText(text, x + 35, scrollY + y - 12, 65);
             }
 
@@ -89,15 +88,15 @@ class Orders
             ctx.font = '12px "EXO 2"';
             ctx.fillStyle = color
             ctx.fillRect(w, y - 10 + scrollY, -layer.layer.price_axe_width, 20); 
-            if (orders[i].side == "Buy")                 
-                ctx.fillStyle = theme.colors.orders.buy.price_text;
+            if (positions[i].currentQty > 0)                 
+                ctx.fillStyle = theme.colors.positions.long.price_text;
             else
-                ctx.fillStyle = theme.colors.orders.sell.price_text;
-            let text = orders[i].price.toFixed(1);
+                ctx.fillStyle = theme.colors.positions.short.price_text;
+            let text = positions[i].avgEntryPrice.toFixed(1);
             ctx.fillText(text, w - layer.layer.price_axe_width / 2, y + scrollY);  
         }
     }
 }
 
 
-export default Orders;
+export default Positions;
