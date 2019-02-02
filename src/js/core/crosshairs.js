@@ -27,7 +27,7 @@ class Crosshair {
         ctx.moveTo(0, y + .5);
         ctx.lineTo(chart.offsetWidth, y + .5);
         
-        let x = Math.floor(layer.mouseX);
+        let x = Math.round(layer.mouseX);
         let frameNum = layer.timeframeInCoords(x, chart.offsetWidth) + 1;
         layer.frameNum = frameNum;
         x = Math.round((chart.offsetWidth - frameNum * layer.frameWidth + ((layer.frameWidth) / 2)) + layer.scrollX);
