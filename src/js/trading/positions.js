@@ -42,7 +42,7 @@ class Positions
                 ctx.strokeStyle = color;
                 ctx.lineWidth = 1;
 
-                let x = Math.round(w * 0.1);
+                let x = Math.round(w * 0.03);
                 
 
                 ctx.moveTo(0, Math.round(y + scrollY) + .5);
@@ -57,7 +57,7 @@ class Positions
                     24);
 
                 ctx.fillStyle = theme.colors.positions.long.label_text;
-                let text = (positions[i].currentQty).toLocaleString(); 
+                let text = '▲ ' + (positions[i].currentQty).toLocaleString(); 
                 ctx.fillText(text, x + 35, scrollY + y, 65);
             
             } else {
@@ -66,7 +66,7 @@ class Positions
                 ctx.strokeStyle = color;
                 ctx.lineWidth = 1;
 
-                let x = Math.round(w * 0.1);
+                let x = Math.round(w * 0.03);
 
                 ctx.moveTo(0, Math.round(y + scrollY) + .5);
                 ctx.lineTo(w, Math.round(y + scrollY) + .5);
@@ -80,7 +80,7 @@ class Positions
                     24);
                 
                 ctx.fillStyle = theme.colors.positions.short.label_text;
-                let text = (positions[i].currentQty).toLocaleString(); 
+                let text = '▼ ' + (positions[i].currentQty).toLocaleString(); 
                 ctx.fillText(text, x + 35, scrollY + y, 65);
             }
 
@@ -93,7 +93,7 @@ class Positions
                 ctx.fillStyle = theme.colors.positions.long.price_text;
             else
                 ctx.fillStyle = theme.colors.positions.short.price_text;
-            let text = positions[i].avgEntryPrice.toFixed(1);
+            let text = (positions[i].currentQty > 0?'▲ ':'▼ ') + positions[i].avgEntryPrice.toFixed(1);
             ctx.fillText(text, w - layer.layer.price_axe_width / 2, y + scrollY);  
         }
     }

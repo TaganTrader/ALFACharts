@@ -11,7 +11,7 @@ class DataProvider {
         ];
         
         this.positions = [
-            
+               
         ]
 
         this.data = [];

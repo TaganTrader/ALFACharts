@@ -8,6 +8,7 @@ let theme = {
         axe_texts: "rgba(255, 255, 255, 0.3)",
 
         candles: {
+            //shadow: "#666",
             bull: {
                 body:       "rgba(102, 204, 102, 1)",
                 price_line: "rgba(102, 204, 102, 1)",
@@ -39,7 +40,7 @@ let theme = {
             }
         },
 
-        positions: {
+        /*positions: {
             long: {
                 lines: "rgba(102, 204, 102, 1)",
                 label: "rgba(102, 204, 102, 1)",
@@ -51,6 +52,21 @@ let theme = {
                 label: "rgba(237, 104, 74, 1)",
                 label_text: "rgba(255, 255, 255)",
                 price_text:  "rgba(255, 255, 255, 1)",
+            }
+        },*/
+
+        positions: {
+            long: {
+                lines: "#fbab0b",
+                label: "#fbab0b",
+                label_text: "rgba(0, 0, 0)",
+                price_text:  "rgba(0, 0, 0, 1)",
+            },
+            short: {
+                lines: "#fbab0b",
+                label: "#fbab0b",
+                label_text: "rgba(0, 0, 0)",
+                price_text:  "rgba(0, 0, 0, 1)",
             }
         }
 

@@ -10,7 +10,7 @@ import Positions from '../trading/positions';
 const default_config = {
     frameWidth: 12,
     frameHeight: 8,
-    frameMarginX: 1,
+    frameMarginX: 2,
     frameMarginY: 0,
     maxFrameHeight: 2000,
     autosize: true,
@@ -127,7 +127,7 @@ class CandleLayer {
 
             ctx.fillStyle = color;
             ctx.beginPath();            
-            ctx.strokeStyle = color;
+            ctx.strokeStyle = theme.colors.candles.shadow ? theme.colors.candles.shadow : color;
             ctx.lineWidth = 1;
 
             ctx.moveTo(x - .5, high);
