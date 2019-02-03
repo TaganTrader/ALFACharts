@@ -53,7 +53,7 @@ class Crosshair {
             
         }*/
 
-        let price = (layer.now + (chart.offsetHeight / 2 - y) / layer.frameHeight * layer.tick);
+        let price = (layer.now + (chart.offsetHeight / 2 - y + chart.layer.layer.scrollY) / layer.frameHeight * layer.tick);
         price = (Math.round(price / 0.5) * 0.5).toFixed(1);
         let text = price;
         
