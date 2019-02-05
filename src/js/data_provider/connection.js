@@ -21,8 +21,7 @@ class Connection extends EventEmitter
         this.ws.onclose = event => this.on_close(event);
     }
 
-    send (msg) {         
-        console.log(msg);
+    send (msg) {        
         return new Promise((resolve, reject) => {
             msg.qid = ++this.query_id;
             let timeout = setTimeout(() => { reject() }, 2000);

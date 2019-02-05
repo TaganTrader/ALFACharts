@@ -32,10 +32,14 @@ class Layer {
         return Math.floor((scrollX + (width - x)) / frameWidth);
     }
 
-    _mousedown(e) {
+    _mousedown(e, touch) {
         let chart = this.parent;
         let offsetX = e.offsetX * chart.ratio;
         let offsetY = e.offsetY * chart.ratio;
+        if (touch) {
+            offsetX = e.touches[0].clientX * chart.ratio;
+            offsetY = e.touches[0].clientY * chart.ratio;
+        }
 
         if (e.offsetX <= chart.offsetWidth - this.price_axe_width)
             $(chart.linen).parent().addClass('ac_chart_cur_grabbing');
@@ -60,11 +64,15 @@ class Layer {
         return false;
     }
 
-    _mousemove(e) {
+    _mousemove(e, touch) {
         let chart = this.parent;
         let offsetX = e.offsetX * chart.ratio;
         let offsetY = e.offsetY * chart.ratio;
-
+        if (touch) {
+            offsetX = e.touches[0].clientX * chart.ratio;
+            offsetY = e.touches[0].clientY * chart.ratio;
+        }
+        
         this.mouseX = offsetX;
         this.mouseY = offsetY;
 
@@ -72,9 +80,6 @@ class Layer {
             if (this.baseMouseX + this.baseScrollX <= chart.offsetWidth - this.price_axe_width) {     
                 this.scrollX = offsetX - this.baseMouseX;
                 this.scrollY = offsetY - this.baseMouseY;
-
-                /*if (this.scrollX < -chart.offsetWidth * 0.9)
-                    this.scrollX = -chart.offsetWidth * 0.9*/
             } else {
                 this.parent.layer.autosize = false;
                 let h = chart.offsetHeight;
@@ -84,16 +89,12 @@ class Layer {
                     this.frameHeight = this.baseFrameHeight / delta;      
                 else
                     this.frameHeight = this.baseFrameHeight * delta;
-                    
-                // console.log(delta)
-
                 if (this.frameHeight > this.config.maxFrameHeight)
                     this.frameHeight = this.config.maxFrameHeight;
-            }      
-            
-            //self.draw_map();                 
-        }                    
-        this.draw();
+            }                  
+        }        
+        if (!touch)            
+            this.draw();
     }
 
 
@@ -161,6 +162,8 @@ class Layer {
             //}
         
         this.draw();
+
+        e.preventDefault();
         return false;
     }
 
@@ -184,7 +187,12 @@ class Layer {
             .mouseleave((e) => this._mouseleave(e))
             .mouseenter((e) => this._mouseenter(e))
             .dblclick((e)  => this._doubleclick(e))
-            .on("mousewheel", (e) => this._mousewheel(e));
+            .on("wheel", (e) => this._mousewheel(e))
+            .on("touchstart", (e) => this._mousedown(e, true)) //this._mousedown(e)
+            .on("touchmove", (e) => this._mousemove(e, true)) //this._mousedown(e)
+            .on("touchend", (e) => this._mouseup(e)) //this._mousedown(e)
+            /*.on("touchmove", (e) => this._mousemove(e))
+            .on("touchend", (e) => this._mouseup(e))*/
     }
 
     draw (ctx) {
