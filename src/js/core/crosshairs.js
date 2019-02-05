@@ -1,5 +1,6 @@
 "use strict";
 
+const moment = require("moment");
 
 const default_config = {
 
@@ -30,6 +31,7 @@ class Crosshair {
         let x = Math.round(layer.mouseX);
         let frameNum = layer.timeframeInCoords(x, chart.offsetWidth) + 1;
         layer.frameNum = frameNum;
+        
         x = Math.round((chart.offsetWidth - frameNum * layer.frameWidth + ((layer.frameWidth) / 2)) + layer.scrollX);
 
         ctx.moveTo(x - .5, 0); 
@@ -71,7 +73,21 @@ class Crosshair {
         ctx.fillStyle = theme.colors.crosshair_price;
         
         
-        ctx.fillText(text, chart.offsetWidth - layer.price_axe_width / 2, y);  
+        ctx.fillText(text, chart.offsetWidth - layer.price_axe_width / 2, y);
+
+        frameNum = frameNum + chart.dataProvider.offset - 1;
+        
+        if (frameNum >= 0 && chart.dataProvider.data[frameNum]) {
+            ctx.fillStyle = "rgba(30, 30, 30, 0.7)";            
+            ctx.fillRect(x - 60, chart.offsetHeight - 20, 120, 20);
+
+            ctx.textAlign = "center"; 
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = "rgb(255, 255, 255)";
+            ctx.font = '11px "EXO 2"';            
+            text = moment(chart.dataProvider.data[frameNum].timestamp * 1000).format("YYYY-MM-DD HH:mm:ss");
+            ctx.fillText(text, x, chart.offsetHeight - 9);            
+        }
     }
 
 

@@ -73,8 +73,8 @@ class Layer {
                 this.scrollX = offsetX - this.baseMouseX;
                 this.scrollY = offsetY - this.baseMouseY;
 
-                if (this.scrollX < -chart.offsetWidth * 0.9)
-                    this.scrollX = -chart.offsetWidth * 0.9
+                /*if (this.scrollX < -chart.offsetWidth * 0.9)
+                    this.scrollX = -chart.offsetWidth * 0.9*/
             } else {
                 this.parent.layer.autosize = false;
                 let h = chart.offsetHeight;
@@ -101,7 +101,8 @@ class Layer {
         let chart = this.parent;
         this.mousedowned = false;
         this.now += this.scrollY / this.frameHeight * this.tick;
-        this.scrollY = 0;
+        this.scrollY = 0;        
+
         //$(chart.linen).css('cursor', '');        
         //chart.linen.style.cursor = '';
         $(chart.linen).parent().removeClass('ac_chart_cur_n-resize ac_chart_cur_grabbing');
@@ -144,8 +145,8 @@ class Layer {
             else
                 this.frameWidth = this.frameWidth * 1.15;
                     
-            if (this.frameWidth < 1)
-                this.frameWidth = 1;
+            if (this.frameWidth < 0.5)
+                this.frameWidth = 0.5;
             if (this.frameWidth > 150)
                 this.frameWidth = 150;
 
@@ -155,7 +156,8 @@ class Layer {
             //if (!system.key_states[17]) {
             let diff = this.frameWidth - oldWidth;
                         
-            this.scrollX = this.scrollX + diff * Math.max(1, this.frameNum) - diff / 2;
+            this.scrollX = this.scrollX + diff * this.frameNum - diff / 2;
+            
             //}
         
         this.draw();
@@ -172,7 +174,7 @@ class Layer {
         this.mousedowned = false;
         this.now = 0;
         this.baseFrameHeight = 0;
-        this.price_axe_width = 46;
+        this.price_axe_width = 46;        
 
 
         $(chart.linen)

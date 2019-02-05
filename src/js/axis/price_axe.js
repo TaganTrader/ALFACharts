@@ -60,7 +60,6 @@ class PriceAxe extends Axe {
         price_from = now - (h / 2) / (frameHeight) * tick + scrollY / (frameHeight) * tick;
 
         
-
         let div = this.getPriceScale(price_from, price_to, h / 2, 50);
     
         price_to = Math.ceil(price_to / div) * div;

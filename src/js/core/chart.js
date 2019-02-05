@@ -69,7 +69,7 @@ class ALFAChart extends EventEmitter {
         this._resize();
         this.clear();
 
-        this.dataProvider = new DataProvider();
+        this.dataProvider = new DataProvider(this);
         this.layer = new CandleLayer(this);        
         this.crosshair = new Crosshair(this);
 

@@ -27,6 +27,7 @@ class CandleLayer {
         this.tick = this.dataProvider.tick;
         
         this.layer = new Layer(parent, config)
+        
         this.axis = {
             price_axe: new PriceAxe(this),
             time_axe:  new TimeAxe(this)
@@ -40,20 +41,20 @@ class CandleLayer {
 
 
         this.orders = new Orders(this, this.dataProvider.orders);   
-        this.positions = new Positions(this, this.dataProvider.positions);
+        this.positions = new Positions(this, this.dataProvider.positions);        
+        this.dataStartIndexOffset = 0;
     }
 
-    extremums (from, count) {
+    extremums (from, to) {
         let data = this.dataProvider.data;
         if (from < 0) {
-            count += from;
             from = 0;
         }        
         if (from > data.length - 1) from = data.length - 1;
         let min = data[from].low;
         let max = data[from].high;
 
-        for (let i = from + 1; i < from + count && i < data.length; i++) {
+        for (let i = from + 1; i < to && i < data.length; i++) {
             min = Math.min(data[i].low, min);
             max = Math.max(data[i].high, max);
         }
@@ -62,12 +63,11 @@ class CandleLayer {
     }
 
     autosize_layer() {
-        let chart = this.parent;
-        let framesAmount = Math.floor(chart.offsetWidth / this.layer.frameWidth);
+        let chart = this.parent;        
         
-        if (this.dataProvider.data.length == 0) return;
+        if (this.dataProvider.data.length == 0) return;        
 
-        let extremums = this.extremums(Math.round(this.layer.scrollX / this.layer.frameWidth), framesAmount);
+        let extremums = this.extremums(this.dataStartIndexOffset, this.dataProvider.offset + Math.round((chart.offsetWidth + this.layer.scrollX) / this.layer.frameWidth));
         
         let price_height = extremums.max - extremums.min;
         this.layer.now = (extremums.max + extremums.min) / 2;
@@ -80,7 +80,7 @@ class CandleLayer {
         let now = this.layer.now;
         let diff = (now - price) / this.tick * frameHeight;
         return this.parent.offsetHeight / 2 + diff;
-    }
+    }    
 
     draw_candles (ctx, theme) {
         let chart = this.parent;
@@ -97,9 +97,21 @@ class CandleLayer {
 
         ctx.setLineDash([0]);
 
-        let last_zero = 0;
-        
-        for (let i = 0; i < data.length; i++) {
+        if (this.dataProvider.data.length == 0) return;
+
+        let from = this.dataStartIndexOffset
+        let to = this.dataProvider.offset + Math.ceil((w + scrollX) / frameWidth);// data.length - 1;        
+
+        if (to > data.length - 1)
+            to = data.length - 1;
+            
+        if (data.length - to < 2000)
+            this.dataProvider.needLastData();
+
+        if (from < 1000 && data.length > 0 && data[0].timestamp < new Date().getTime() / 1000 - 10 * 60)
+            this.dataProvider.needNextData();
+
+        for (let i = from; i <= to; i++) {
             let open = Math.round(this.priceToCoords(data[i].open) + scrollY);
             let close = Math.round(this.priceToCoords(data[i].close) + scrollY);            
             let high = Math.round(this.priceToCoords(data[i].high) + scrollY);
@@ -107,7 +119,16 @@ class CandleLayer {
 
             let candle_width = Math.round(Math.max(frameWidth - this.layer.frameMarginX - 2, 1) / 2) * 2 + 1;
 
-            let x = Math.round(w - ((frameWidth - this.layer.frameMarginX) / 2) + scrollX - 1 - i * frameWidth);            
+            let x = Math.round(w - ((frameWidth - this.layer.frameMarginX) / 2) + scrollX - 1 - (i - this.dataProvider.offset) * frameWidth);            
+
+            /*if (i == to && x > -w) {
+                this.dataProvider.needLastData();
+            }
+
+            if (i == 0 && x < w) {
+                if (data[i].timestamp < new Date().getTime() / 1000 - 10 * 60)
+                    this.dataProvider.needNextData(this);
+            }*/
 
             if (x < -frameWidth) continue;
             if (x > chart.offsetWidth + frameWidth) continue;
@@ -143,7 +164,9 @@ class CandleLayer {
 
         // Рисуем линию цены
         if (data.length > 0) {
-            let y = scrollY + this.priceToCoords(data[0].close);
+            let candle = data[this.dataStartIndexOffset];            
+            let y = scrollY + this.priceToCoords(candle.close);
+            let y0 = scrollY + this.priceToCoords(data[0].close);
                         
             let color = "";            
             if (data[0].close >= data[0].open) {
@@ -152,14 +175,23 @@ class CandleLayer {
                 color = theme.colors.candles.bear.price_line;       
             }
 
-            ctx.beginPath();
-            ctx.setLineDash([1, 1]);
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 1;
 
-            ctx.moveTo(0, Math.round(y) + .5);
-            ctx.lineTo(w, Math.round(y) + .5);
-            ctx.stroke();
+            if (data[0].timestamp > new Date().getTime() / 1000 - 10 * 60)
+            {
+                ctx.beginPath();
+                ctx.setLineDash([1, 1]);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1;
+                ctx.moveTo(0, Math.round(y0) + .5);
+                ctx.lineTo(w, Math.round(y0) + .5);
+                ctx.stroke();
+            }
+
+            if (candle.close >= candle.open) {
+                color = theme.colors.candles.bull.price_line;                
+            } else {
+                color = theme.colors.candles.bear.price_line;       
+            }
             
             ctx.fillStyle = color;
             ctx.fillRect(w, y - 10, -this.layer.price_axe_width, 20);
@@ -167,11 +199,11 @@ class CandleLayer {
             ctx.textAlign = "center"; 
             ctx.textBaseline = "middle";
             ctx.font = '12px "EXO 2"';
-            if (data[0].close >= data[0].open)  
+            if (candle.close >= candle.open)  
                 ctx.fillStyle = theme.colors.candles.bull.price_text;
             else
                 ctx.fillStyle = theme.colors.candles.bear.price_text;
-            let text = data[0].close.toFixed(1);
+            let text = candle.close.toFixed(1);
             ctx.fillText(text, w - this.layer.price_axe_width / 2, y);
         }
         
@@ -182,6 +214,13 @@ class CandleLayer {
         
         this.width = this.parent.offsetWidth;
         this.height = this.parent.offsetHeight;
+
+        // Высчитываем индекс в массиве данных первой свечи
+        this.dataStartIndexOffset = Math.ceil(this.dataProvider.offset + (this.layer.scrollX + this.layer.price_axe_width) / this.layer.frameWidth);
+        if (this.dataStartIndexOffset < 0)
+            this.dataStartIndexOffset = 0;
+        if (this.dataStartIndexOffset > this.dataProvider.data.length - 1)
+            this.dataStartIndexOffset = this.dataProvider.data.length - 1;
 
         if (this.autosize) {
             this.autosize_layer()
