@@ -92,9 +92,8 @@ class Layer {
                 if (this.frameHeight > this.config.maxFrameHeight)
                     this.frameHeight = this.config.maxFrameHeight;
             }                  
-        }        
-        if (!touch)            
-            this.draw();
+        }                          
+        this.draw();
     }
 
 
