@@ -50,6 +50,8 @@ class DataProvider {
                 candles.reverse();
                 this.data = this.data.concat(candles);
                 this.__p_needData = false;
+            }).catch (() => {
+                this.__p_needData = false;
             });
         }
         
@@ -70,6 +72,8 @@ class DataProvider {
                 this.offset += candles.length;                
                 this.data = candles.concat(this.data);                
                 this.__p_needData = false;
+            }).catch (() => {
+                this.__p_needData = false;
             });
         }        
     }
@@ -78,7 +82,7 @@ class DataProvider {
         if (!this.__p_needData) {
             this.__p_needData = true;            
             let from = this.data[3].timestamp;
-            let to = new Date().getTime() / 1000 + 5 * 60;
+            let to = Math.floor(new Date().getTime() / 1000) + 5 * 60;
             this.connection.send({ method: "candles", params: { from, to } }).then(candles => {
                 for (let i = 0; i < candles.length; i++) {
                     if (3 - i >= 0) {
@@ -87,6 +91,8 @@ class DataProvider {
                         this.data.unshift(candles[i]);
                     }
                 }                
+                this.__p_needData = false;
+            }).catch (() => {
                 this.__p_needData = false;
             });
         }  
@@ -104,6 +110,8 @@ class DataProvider {
                     this.offset = 0;
                 this.data = candles;
                 this.__p_needData = false;                
+            }).catch (() => {
+                this.__p_needData = false;
             });
         }
     }

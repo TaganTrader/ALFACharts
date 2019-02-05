@@ -5,7 +5,7 @@ import { EventEmitter } from "events";
 class Connection extends EventEmitter
 {
     constructor (processing, address) {
-        super();
+        super();        
         this._init(processing, address);        
         this.query_id = new Date().getTime();
         this.queries_callbacks = [];
@@ -13,22 +13,25 @@ class Connection extends EventEmitter
 
     _init (processing, address)
     {
-        this.ws = new WebSocket(address);        
+        this.ws = new WebSocket(address);
         this.processing = processing;
-        this.ws.onmessage = events => this.on_message(events);
-        this.ws.onerror = this.on_error;
-        this.ws.onclose = this.on_close;
+        this.address = address;
+        this.ws.onmessage = event => this.on_message(event);
+        this.ws.onerror = error => this.on_error(error);
+        this.ws.onclose = event => this.on_close(event);
     }
 
-    send (msg) {                        
-        if (typeof msg === "object")
-        {
-            return new Promise((resolve, reject) => {
-                msg.qid = ++this.query_id;
-                this.queries_callbacks[msg.qid] = data => { resolve(data) };
+    send (msg) {         
+        console.log(msg);
+        return new Promise((resolve, reject) => {
+            msg.qid = ++this.query_id;
+            let timeout = setTimeout(() => { reject() }, 2000);
+            this.queries_callbacks[msg.qid] = data => { clearTimeout(timeout); resolve(data) };
+            if (this.ws.readyState === 1)
                 this.ws.send(JSON.stringify(msg));
-            })            
-        }
+            else
+                reject();
+        });        
     }
 
     on_message (event) {
@@ -52,8 +55,11 @@ class Connection extends EventEmitter
             this.processing.unrecognized(data);
     }
 
-    on_error () {
+    on_error (error) {
         console.log("Ошибка " + error.message);
+        setTimeout(() => {
+            this._init(this.processing, this.address);
+        }, 1000);
     }
 
     on_close (event) {
@@ -64,7 +70,10 @@ class Connection extends EventEmitter
             console.log('Обрыв соединения'); // например, "убит" процесс сервера
         }
         console.log('Код: ' + event.code + ' причина: ' + event.reason);
-        this._init();
+        setTimeout(() => {
+            this._init(this.processing, this.address);
+        }, 1000);
+        
     }    
 }
 
