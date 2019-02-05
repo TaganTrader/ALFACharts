@@ -90,7 +90,7 @@ class ALFAChart extends EventEmitter {
 
         this.ratio = window.devicePixelRatio * 1;
         if (this.touchMode)
-            this.ratio = 1.5;
+            this.ratio = 1;
 
         let width = $(this.el).width() * this.ratio,
             height = $(this.el).height() * this.ratio;
