@@ -10,7 +10,10 @@ class Theme {
     constructor (theme) {        
         if (typeof themes[theme] === "undefined")
             throw new Error(`Theme ${theme} not found`);
-        this.colors = themes[theme].colors;
+        for (let key in themes[theme]) {
+            if (themes[theme].hasOwnProperty(key))
+                this[key] = themes[theme][key];
+        }        
     }
 
 }

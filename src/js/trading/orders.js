@@ -26,8 +26,22 @@ class Orders
         ctx.beginPath();
 
         ctx.textAlign = "center"; 
-        ctx.textBaseline = "middle";
-        ctx.font = '12px "EXO 2"';
+        ctx.textBaseline = "middle"; 
+        
+        let fontSize = 12;
+        if (layer.layer.touchMode) {            
+            ctx.font = (fontSize * theme.mobile.font_scale) + 'px "EXO 2"';
+        }            
+        else {
+            theme.mobile.scale = 1;
+            theme.mobile.font_scale = 1;
+            ctx.font = (fontSize) + 'px "EXO 2"';
+        }
+        
+        let labelHeight = 20;
+        if (layer.layer.touchMode)
+            labelHeight = Math.round(labelHeight * theme.mobile.scale); 
+        
         ctx.setLineDash([5, 1]);
 
 
@@ -53,12 +67,12 @@ class Orders
                 ctx.fillRect(
                     x, 
                     y + scrollY, 
-                    70, 
-                    24);
+                    70 * theme.mobile.font_scale, 
+                    labelHeight);
 
                 ctx.fillStyle = theme.colors.orders.buy.label_text;
                 let text = (orders[i].orderQty).toLocaleString(); 
-                ctx.fillText(text, x + 35, scrollY + y + 12, 65);
+                ctx.fillText(text, x + 35 * theme.mobile.font_scale, scrollY + y + 12, 65 * theme.mobile.font_scale);
             
             } else {
                 color = theme.colors.orders.sell.lines;
@@ -70,25 +84,29 @@ class Orders
 
                 ctx.moveTo(0, Math.round(y + scrollY) + .5);
                 ctx.lineTo(w, Math.round(y + scrollY) + .5);
-                ctx.stroke();
+                ctx.stroke();                
 
                 ctx.fillStyle = theme.colors.orders.sell.label;
                 ctx.fillRect(
                     x, 
-                    y + scrollY - 24, 
-                    70, 
-                    24);
+                    y + scrollY - labelHeight, 
+                    70 * theme.mobile.font_scale, 
+                    labelHeight);
                 
                 ctx.fillStyle = theme.colors.orders.sell.label_text;
                 let text = (orders[i].orderQty).toLocaleString(); 
-                ctx.fillText(text, x + 35, scrollY + y - 12, 65);
+                ctx.fillText(text, x + 35 * theme.mobile.font_scale, scrollY + y - 12, 65 * theme.mobile.font_scale);
             }
 
             ctx.textAlign = "center"; 
             ctx.textBaseline = "middle";            
-            ctx.font = '12px "EXO 2"';
+            let fontSize = 12;
+            if (layer.layer.touchMode)
+                ctx.font = (fontSize * theme.mobile.font_scale) + 'px "EXO 2"';
+            else
+                ctx.font = (fontSize) + 'px "EXO 2"';
             ctx.fillStyle = color
-            ctx.fillRect(w, y - 10 + scrollY, -layer.layer.price_axe_width, 20); 
+            ctx.fillRect(w, y - labelHeight/2 + scrollY, -layer.layer.price_axe_width, labelHeight); 
             if (orders[i].side == "Buy")                 
                 ctx.fillStyle = theme.colors.orders.buy.price_text;
             else

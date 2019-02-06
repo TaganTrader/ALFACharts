@@ -160,7 +160,23 @@ class CandleLayer {
                 y,
                 Math.round(candle_width),
                 height + 1);
-        }        
+        }    
+                    
+    }
+
+    draw_price(ctx, theme)
+    {
+        let chart = this.parent;
+        let data = this.dataProvider.data;
+        let tick = this.layer.tick;
+
+        let scrollX = this.layer.scrollX;
+        let scrollY = this.layer.scrollY;
+    
+        let w = this.parent.offsetWidth;
+        let h = this.parent.offsetHeight;
+        let frameWidth = this.layer.frameWidth;
+        let frameHeight = this.layer.frameHeight;
 
         // Рисуем линию цены
         if (data.length > 0) {
@@ -194,11 +210,19 @@ class CandleLayer {
             }
             
             ctx.fillStyle = color;
-            ctx.fillRect(w, y - 10, -this.layer.price_axe_width, 20);
+            let labelHeight = 20
+            if (this.layer.touchMode)
+                labelHeight = Math.round(labelHeight * theme.mobile.scale / 2) * 2;
+            ctx.fillRect(w, y - (labelHeight / 2), -this.layer.price_axe_width, labelHeight);
 
             ctx.textAlign = "center"; 
             ctx.textBaseline = "middle";
-            ctx.font = '12px "EXO 2"';
+
+            if (this.layer.touchMode)
+                ctx.font = '24px "EXO 2"';
+            else
+                ctx.font = '12px "EXO 2"';
+
             if (candle.close >= candle.open)  
                 ctx.fillStyle = theme.colors.candles.bull.price_text;
             else
@@ -206,7 +230,6 @@ class CandleLayer {
             let text = candle.close.toFixed(1);
             ctx.fillText(text, w - this.layer.price_axe_width / 2, y);
         }
-        
     }
 
     draw () {
@@ -229,7 +252,6 @@ class CandleLayer {
             
         var c = this.parent.linen;
         var ctx = c.getContext("2d");        
-        ctx.font = '14px "EXO 2"';
     
         ctx.fillStyle = this.parent.theme.colors.workarea_bg;
         ctx.fillRect(0, 0, c.width, c.height);
@@ -239,6 +261,7 @@ class CandleLayer {
         this.draw_candles(ctx, theme);
         this.orders.draw(ctx, theme);
         this.positions.draw(ctx, theme);
+        this.draw_price(ctx, theme);
         this.parent.crosshair.draw(ctx, this.layer, theme);
     }
 

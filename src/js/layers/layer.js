@@ -33,14 +33,42 @@ class Layer {
         return Math.floor((scrollX + (width - x)) / frameWidth);
     }
 
-    _mousedown(e, touch) {        
+    offset = function (elem) {
+        var offsetLeft = elem.offsetLeft
+            , offsetTop = elem.offsetTop
+            , lastElem = elem;
+
+        while (elem = elem.offsetParent) {
+            if (elem === document.body) { //from my observation, document.body always has scrollLeft/scrollTop == 0
+                break;
+            }
+            offsetLeft += elem.offsetLeft;
+            offsetTop += elem.offsetTop;
+            lastElem = elem;
+        }
+        if (lastElem && lastElem.style.position === 'fixed') { //slow - http://jsperf.com/offset-vs-getboundingclientrect/6
+            //if(lastElem !== document.body) { //faster but does gives false positive in Firefox
+            offsetLeft += window.pageXOffset || document.documentElement.scrollLeft;
+            offsetTop += window.pageYOffset || document.documentElement.scrollTop;
+        }
+        return {
+            left: offsetLeft,
+            top: offsetTop
+        };
+    };
+
+    _mousedown(e, touch) {   
+        e.preventDefault();   
+        event.cancelBubble = true;       
         let chart = this.parent;
         let offsetX = e.offsetX * chart.ratio;
         let offsetY = e.offsetY * chart.ratio;
+        
 
         if (e.center) {
-            offsetX = (e.center.x) * chart.ratio;
-            offsetY = (e.center.y) * chart.ratio;
+            let offset = this.offset(chart.linen);
+            offsetX = (e.srcEvent.pageX - offset.left) * chart.ratio;
+            offsetY = (e.srcEvent.pageY - offset.top) * chart.ratio;
         }
         
 
@@ -54,7 +82,7 @@ class Layer {
         else
             $(chart.linen).parent().addClass('ac_chart_cur_n-resize');
     
-
+ 
         this.mousedowned = true;
         this.baseMouseX = offsetX - this.scrollX;
         this.baseMouseY = offsetY - this.scrollY;
@@ -72,21 +100,29 @@ class Layer {
         return false;
     }
 
+
+    
     _mousemove(e, touch) {
-        e.preventDefault();
+        e.preventDefault();   
+        event.cancelBubble = true;  
         let chart = this.parent;
         let offsetX = e.offsetX * chart.ratio;
         let offsetY = e.offsetY * chart.ratio;
           
+        if (e.maxPointers && e.maxPointers > 1) return;
+        
+
         if (e.center) {
-            offsetX = (e.center.x) * chart.ratio;
-            offsetY = (e.center.y) * chart.ratio;
+            let offset = this.offset(chart.linen);
+            offsetX = (e.srcEvent.pageX - offset.left) * chart.ratio;
+            offsetY = (e.srcEvent.pageY - offset.top) * chart.ratio;
+            //$('#debug').html(JSON.stringify(e.srcEvent.pageY, null, "  "));
         }
         
-        if (touch) {
+        /*if (touch) {
             offsetX = (e.touches[0].pageX - e.touches[0].target.offsetLeft) * chart.ratio;
             offsetY = (e.touches[0].pageY - e.touches[0].target.offsetTop) * chart.ratio;
-        }
+        }*/
         
         this.mouseX = offsetX;
         this.mouseY = offsetY;
@@ -140,17 +176,18 @@ class Layer {
 
     _mousewheel (e) {
         e.preventDefault();   
+        event.cancelBubble = true;        
         
-        
+       
+
+
         //alert(JSON.stringify(e))
+       
 
-
-
-        if (e.originalEvent)
-            e = e.originalEvent;
-        else {
-            e.deltaY = e.distance - this._startDistance;
-        }
+        
+        
+        if (e.originalEvent) 
+            e = e.originalEvent;        
 
         /*if (system.key_states[16]) {
             if (e.deltaY > 0)
@@ -167,11 +204,19 @@ class Layer {
                 self.params.fieldHeight -= e.deltaY > 0?1:-1;
         } else {  */          
             let oldWidth = this.frameWidth;
-
-            if (e.deltaY > 0)
-                this.frameWidth = this.frameWidth / 1.15;
-            else
-                this.frameWidth = this.frameWidth * 1.15;
+            //let center = 0;
+            //if (e.center)
+            //    center = e.center.x;
+            if (e.scale) {
+                this.frameWidth = this._baseFrameWidth * e.scale;
+            } else {
+                if (e.deltaY > 0)
+                    this.frameWidth = this.frameWidth / 1.15;
+                else
+                    this.frameWidth = this.frameWidth * 1.15;
+            }
+            
+            
                     
             if (this.frameWidth < 0.5)
                 this.frameWidth = 0.5;
@@ -193,7 +238,7 @@ class Layer {
     }
 
     _pinchStart (e) {
-        this._startDistance = e.distance;
+        this._baseFrameWidth = this.frameWidth;
     }
 
     _init () {
@@ -208,31 +253,28 @@ class Layer {
         this.baseFrameHeight = 0;
         this.price_axe_width = 46;        
 
-        var mc = new HAMMER.Manager(chart.linen);
+        this.touchMode = chart.isTouchMode();
 
-        mc.add(new HAMMER.Pan({ threshold: 0, pointers: 0 }));
-        mc.add(new Hammer.Pinch({ threshold: 0 }));//.recognizeWith([mc.get('pan'), mc.get('rotate')]);
+        if (this.touchMode)
+        {                
+            var mc = new HAMMER.Manager(chart.linen);
 
-
-        mc.add(new HAMMER.Tap({ event: 'doubletap', taps: 2 }));
-        mc.add(new HAMMER.Tap());
-
-        
-
-        mc.on("tap", (e) => this._mousedown(e));
-        mc.on("panstart", (e) => this._mousedown(e));
-        mc.on("panmove", (e) => this._mousemove(e));
-        mc.on("panend", (e) => this._mouseup(e));
+            mc.add(new HAMMER.Pan({ threshold: 0, pointers: 0 }));
+            mc.add(new Hammer.Pinch({ threshold: 0 })).recognizeWith([mc.get('pan')]);
 
 
-        mc.on("pinchstart", (e) => this._pinchStart(e));
-        mc.on("pinch", (e) => this._mousewheel(e));
+            mc.add(new HAMMER.Tap({ event: 'doubletap', taps: 2 }));
+            mc.add(new HAMMER.Tap());
 
-        /*mc.on("rotatestart rotatemove", onRotate);
-        mc.on("pinchstart pinchmove", onPinch);
-        mc.on("swipe", onSwipe);
-        mc.on("tap", onTap);
-        mc.on("doubletap", onDoubleTap);*/
+                    
+            mc.on("tap", (e) => this._mousedown(e));
+            mc.on("panstart", (e) => this._mousedown(e));
+            mc.on("panmove", (e) => this._mousemove(e));
+            mc.on("panend", (e) => this._mouseup(e));
+            mc.on("pinchstart", (e) => this._pinchStart(e));
+            mc.on("pinch", (e) => this._mousewheel(e));
+            mc.on("doubletap", (e) => this._doubleclick(e));
+        }        
 
 
         $(chart.linen)
@@ -241,7 +283,7 @@ class Layer {
             .mouseup((e)    => this._mouseup(e))
             .mouseleave((e) => this._mouseleave(e))
             .mouseenter((e) => this._mouseenter(e))
-            .dblclick((e)  => this._doubleclick(e))
+            .dblclick((e)   => this._doubleclick(e))
             .on("wheel", (e) => this._mousewheel(e))
             /*.on("touchstart", (e) => this._mousedown(e, true)) 
             .on("touchmove", (e) => this._mousemove(e, true)) 

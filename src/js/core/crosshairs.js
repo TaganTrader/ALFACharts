@@ -59,17 +59,20 @@ class Crosshair {
         price = (Math.round(price / 0.5) * 0.5).toFixed(1);
         let text = price;
         
-        ctx.textAlign = "center"; 
-        ctx.textBaseline = "middle";        
-        ctx.font = '10px "EXO 2"';
-        ctx.fillStyle = theme.colors.crosshair_price_bg;
-            
-
-        ctx.fillRect(chart.offsetWidth, y - 10, -layer.price_axe_width, 20);
+        
+        ctx.fillStyle = theme.colors.crosshair_price_bg;            
+        let labelHeight = 20;
+        if (layer.touchMode)
+            labelHeight = Math.round(labelHeight * theme.mobile.scale / 2) * 2;        
+        ctx.fillRect(chart.offsetWidth, y - labelHeight/2, -layer.price_axe_width, labelHeight);
 
         ctx.textAlign = "center"; 
         ctx.textBaseline = "middle";
-        ctx.font = '12px "EXO 2"';
+        let fontSize = 12;
+        if (layer.touchMode)
+            ctx.font = (fontSize * theme.mobile.font_scale) + 'px "EXO 2"';
+        else
+            ctx.font = (fontSize) + 'px "EXO 2"';
         ctx.fillStyle = theme.colors.crosshair_price;
         
         
@@ -78,13 +81,20 @@ class Crosshair {
         frameNum = frameNum + chart.dataProvider.offset - 1;
         
         if (frameNum >= 0 && chart.dataProvider.data[frameNum]) {
-            ctx.fillStyle = "rgba(30, 30, 30, 0.7)";            
-            ctx.fillRect(x - 60, chart.offsetHeight - 20, 120, 20);
+            ctx.fillStyle = "rgba(30, 30, 30, 0.7)";   
+            let labelHeight = 30;
+            if (layer.touchMode)
+                labelHeight = Math.round(labelHeight * theme.mobile.scale / 2) * 2;        
+            ctx.fillRect(x - 60 * layer.touchMode?theme.mobile.scale:1, chart.offsetHeight - labelHeight/2, 120 * layer.touchMode?theme.mobile.scale:1, labelHeight);
 
             ctx.textAlign = "center"; 
             ctx.textBaseline = "middle";
             ctx.fillStyle = "rgb(255, 255, 255)";
-            ctx.font = '11px "EXO 2"';            
+            let fontSize = 11;
+            if (layer.touchMode)
+                ctx.font = (fontSize * theme.mobile.font_scale) + 'px "EXO 2"';
+            else
+                ctx.font = (fontSize) + 'px "EXO 2"';          
             text = moment(chart.dataProvider.data[frameNum].timestamp * 1000).format("YYYY-MM-DD HH:mm:ss");
             ctx.fillText(text, x, chart.offsetHeight - 9);            
         }

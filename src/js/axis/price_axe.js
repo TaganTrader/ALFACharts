@@ -43,8 +43,12 @@ class PriceAxe extends Axe {
         ctx.textAlign = "center"; 
         ctx.textBaseline = "middle";  
 
-        ctx.font = '30px "EXO 2"';
-        
+        let fontSize = 12;
+        if (this.layer.touchMode)
+            ctx.font = (fontSize * theme.mobile.font_scale) + 'px "EXO 2"';
+        else
+            ctx.font = (fontSize) + 'px "EXO 2"';
+
         ctx.fillStyle = theme.colors.axe_texts;
         ctx.setLineDash([0]);
 
@@ -62,7 +66,7 @@ class PriceAxe extends Axe {
         price_from = now - (h / 2) / (frameHeight) * tick + scrollY / (frameHeight) * tick;
 
         
-        let div = this.getPriceScale(price_from, price_to, h / 2, 50);
+        let div = this.getPriceScale(price_from, price_to, h / 2, this.layer.touchMode?80:50);
     
         price_to = Math.ceil(price_to / div) * div;
         price_from = Math.floor(price_from / div) * div;

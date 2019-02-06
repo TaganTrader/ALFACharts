@@ -70,6 +70,10 @@ let theme = {
             }
         }
 
+    },
+    mobile: {
+        scale: 2.2,
+        font_scale: 2,
     }
 }
 
