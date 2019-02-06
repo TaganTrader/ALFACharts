@@ -75,7 +75,7 @@ class PriceAxe extends Axe {
 
         let max_width = Math.max(ctx.measureText(price_from.toFixed(1)).width, ctx.measureText(price_to.toFixed(1)).width, 46);
         
-
+        max_width = Math.ceil(max_width / 2) * 2
 
         for (let p = price_from; p <= price_to; p += div) {
             iter ++;
