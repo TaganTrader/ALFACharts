@@ -79,7 +79,7 @@ class DataProvider {
     }
 
     update() {
-        if (!this.__p_needData) {
+        if (!this.__p_needData && this.data.length > 3) {
             this.__p_needData = true;            
             let from = this.data[3].timestamp;
             let to = Math.floor(new Date().getTime() / 1000) + 5 * 60;
