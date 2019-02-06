@@ -63,8 +63,8 @@ class Positions
                 ctx.fillStyle = theme.colors.positions.long.label;
                 ctx.fillRect(
                     x, 
-                    y + scrollY - labelHeight/2, 
-                    70 * theme.mobile.font_scale, 
+                    Math.round(y + scrollY - labelHeight/2), 
+                    Math.round(70 * theme.mobile.font_scale), 
                     labelHeight);
 
                 ctx.fillStyle = theme.colors.positions.long.label_text;
@@ -88,8 +88,8 @@ class Positions
                 ctx.fillStyle = theme.colors.positions.short.label;
                 ctx.fillRect(
                     x, 
-                    y + scrollY - labelHeight/2, 
-                    70 * theme.mobile.font_scale, 
+                    Math.round(y + scrollY - labelHeight/2), 
+                    Math.round(70 * theme.mobile.font_scale), 
                     labelHeight);
                 
                 ctx.fillStyle = theme.colors.positions.short.label_text;
@@ -105,7 +105,7 @@ class Positions
             else
                 ctx.font = (fontSize) + 'px "EXO 2"';
             ctx.fillStyle = color 
-            ctx.fillRect(w, y - labelHeight/2 + scrollY, -layer.layer.price_axe_width, labelHeight); 
+            ctx.fillRect(w, Math.round(y - labelHeight/2 + scrollY), -layer.layer.price_axe_width, labelHeight); 
             if (positions[i].currentQty > 0)                 
                 ctx.fillStyle = theme.colors.positions.long.price_text;
             else

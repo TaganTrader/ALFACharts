@@ -212,16 +212,17 @@ class CandleLayer {
             ctx.fillStyle = color;
             let labelHeight = 20
             if (this.layer.touchMode)
-                labelHeight = Math.round(labelHeight * theme.mobile.scale / 2) * 2;
-            ctx.fillRect(w, y - (labelHeight / 2), -this.layer.price_axe_width, labelHeight);
+                labelHeight = Math.round(labelHeight * theme.mobile.scale);
+            ctx.fillRect(w, Math.round(y - labelHeight / 2), -this.layer.price_axe_width, labelHeight);
 
-            ctx.textAlign = "center"; 
+            ctx.textAlign = "center";
             ctx.textBaseline = "middle";
 
+            let fontSize = 12;
             if (this.layer.touchMode)
-                ctx.font = '24px "EXO 2"';
+                ctx.font = (fontSize * theme.mobile.font_scale) + 'px "EXO 2"';
             else
-                ctx.font = '12px "EXO 2"';
+                ctx.font = (fontSize) + 'px "EXO 2"';
 
             if (candle.close >= candle.open)  
                 ctx.fillStyle = theme.colors.candles.bull.price_text;

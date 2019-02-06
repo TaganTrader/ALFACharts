@@ -39,22 +39,6 @@ class Crosshair {
         ctx.stroke();
         ctx.fillStyle = "rgb(255, 255, 255)";
 
-
-        /*if (frameNum > 0 && dp.markets[this.market].map && dp.markets[this.market].map.length >= frameNum) {
-            ctx.fillStyle = "rgba(30, 30, 30, 0.7)";            
-            ctx.fillRect(x - 50, l.height - 18, 100, 18);
-
-            ctx.textAlign = "center"; 
-            ctx.textBaseline = "middle";
-            ctx.fillStyle = "rgb(255, 255, 255)";
-            ctx.font = '10px "EXO 2"';
-
-            text = new Date(dp.markets[this.market].map[dp.markets[this.market].map.length - frameNum].ts).toString();
-            ctx.fillText(text, x, l.height - 9);
-
-            
-        }*/
-
         let price = (layer.now + (chart.offsetHeight / 2 - y + chart.layer.layer.scrollY) / layer.frameHeight * layer.tick);
         price = (Math.round(price / 0.5) * 0.5).toFixed(1);
         let text = price;
@@ -64,7 +48,7 @@ class Crosshair {
         let labelHeight = 20;
         if (layer.touchMode)
             labelHeight = Math.round(labelHeight * theme.mobile.scale / 2) * 2;        
-        ctx.fillRect(chart.offsetWidth, y - labelHeight/2, -layer.price_axe_width, labelHeight);
+        ctx.fillRect(chart.offsetWidth, Math.round(y - labelHeight/2), -layer.price_axe_width, labelHeight);
 
         ctx.textAlign = "center"; 
         ctx.textBaseline = "middle";
