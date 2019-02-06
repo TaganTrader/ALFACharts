@@ -12,12 +12,11 @@ class Processing
     }
 
     lastPrice(params) {
-        let price = params.price;
-        let timestamp = Math.floor(new Date(params.timestamp).getTime() / 1000 / 60) * 60;
-        
-        let lastPrice = this.dataProvider.data[0].close;
-
         if (this.dataProvider.data.length < 1) return;
+
+        let price = params.price;
+        let timestamp = Math.floor(new Date(params.timestamp).getTime() / 1000 / 60) * 60;                    
+        let lastPrice = this.dataProvider.data[0].close;
         
         //console.log(Math.floor(this.dataProvider.data[0].timestamp, timestamp, new Date(timestamp).getTime() / 1000 / 60) * 60)
         if (this.dataProvider.data[0].timestamp === timestamp) {            

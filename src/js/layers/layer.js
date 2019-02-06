@@ -1,6 +1,7 @@
 "use strict";
 
 import lodash from 'lodash';
+import HAMMER from '../libs/hammer'
 
 const default_config = {
     frameWidth: 12,
@@ -32,13 +33,20 @@ class Layer {
         return Math.floor((scrollX + (width - x)) / frameWidth);
     }
 
-    _mousedown(e, touch) {
+    _mousedown(e, touch) {        
         let chart = this.parent;
         let offsetX = e.offsetX * chart.ratio;
         let offsetY = e.offsetY * chart.ratio;
+
+        if (e.center) {
+            offsetX = (e.center.x) * chart.ratio;
+            offsetY = (e.center.y) * chart.ratio;
+        }
+        
+
         if (touch) {
-            offsetX = e.touches[0].clientX * chart.ratio;
-            offsetY = e.touches[0].clientY * chart.ratio;
+            offsetX = (e.touches[0].pageX - e.touches[0].target.offsetLeft) * chart.ratio;
+            offsetY = (e.touches[0].pageY - e.touches[0].target.offsetTop) * chart.ratio;
         }
 
         if (e.offsetX <= chart.offsetWidth - this.price_axe_width)
@@ -65,12 +73,19 @@ class Layer {
     }
 
     _mousemove(e, touch) {
+        e.preventDefault();
         let chart = this.parent;
         let offsetX = e.offsetX * chart.ratio;
         let offsetY = e.offsetY * chart.ratio;
+          
+        if (e.center) {
+            offsetX = (e.center.x) * chart.ratio;
+            offsetY = (e.center.y) * chart.ratio;
+        }
+        
         if (touch) {
-            offsetX = e.touches[0].clientX * chart.ratio;
-            offsetY = e.touches[0].clientY * chart.ratio;
+            offsetX = (e.touches[0].pageX - e.touches[0].target.offsetLeft) * chart.ratio;
+            offsetY = (e.touches[0].pageY - e.touches[0].target.offsetTop) * chart.ratio;
         }
         
         this.mouseX = offsetX;
@@ -98,6 +113,7 @@ class Layer {
 
 
     _mouseup(e) {
+        e.preventDefault();
         let chart = this.parent;
         this.mousedowned = false;
         this.now += this.scrollY / this.frameHeight * this.tick;
@@ -123,7 +139,19 @@ class Layer {
     }
 
     _mousewheel (e) {
-        e = e.originalEvent;        
+        e.preventDefault();   
+        
+        
+        //alert(JSON.stringify(e))
+
+
+
+        if (e.originalEvent)
+            e = e.originalEvent;
+        else {
+            e.deltaY = e.distance - this._startDistance;
+        }
+
         /*if (system.key_states[16]) {
             if (e.deltaY > 0)
                 self.params.fieldHeight = Math.round(self.params.fieldHeight / 1.1) - 1;
@@ -160,10 +188,12 @@ class Layer {
             
             //}
         
-        this.draw();
-
-        e.preventDefault();
+        this.draw();        
         return false;
+    }
+
+    _pinchStart (e) {
+        this._startDistance = e.distance;
     }
 
     _init () {
@@ -178,6 +208,32 @@ class Layer {
         this.baseFrameHeight = 0;
         this.price_axe_width = 46;        
 
+        var mc = new HAMMER.Manager(chart.linen);
+
+        mc.add(new HAMMER.Pan({ threshold: 0, pointers: 0 }));
+        mc.add(new Hammer.Pinch({ threshold: 0 }));//.recognizeWith([mc.get('pan'), mc.get('rotate')]);
+
+
+        mc.add(new HAMMER.Tap({ event: 'doubletap', taps: 2 }));
+        mc.add(new HAMMER.Tap());
+
+        
+
+        mc.on("tap", (e) => this._mousedown(e));
+        mc.on("panstart", (e) => this._mousedown(e));
+        mc.on("panmove", (e) => this._mousemove(e));
+        mc.on("panend", (e) => this._mouseup(e));
+
+
+        mc.on("pinchstart", (e) => this._pinchStart(e));
+        mc.on("pinch", (e) => this._mousewheel(e));
+
+        /*mc.on("rotatestart rotatemove", onRotate);
+        mc.on("pinchstart pinchmove", onPinch);
+        mc.on("swipe", onSwipe);
+        mc.on("tap", onTap);
+        mc.on("doubletap", onDoubleTap);*/
+
 
         $(chart.linen)
             .mousedown((e)  => this._mousedown(e))
@@ -187,11 +243,10 @@ class Layer {
             .mouseenter((e) => this._mouseenter(e))
             .dblclick((e)  => this._doubleclick(e))
             .on("wheel", (e) => this._mousewheel(e))
-            .on("touchstart", (e) => this._mousedown(e, true)) //this._mousedown(e)
-            .on("touchmove", (e) => this._mousemove(e, true)) //this._mousedown(e)
-            .on("touchend", (e) => this._mouseup(e)) //this._mousedown(e)
-            /*.on("touchmove", (e) => this._mousemove(e))
-            .on("touchend", (e) => this._mouseup(e))*/
+            /*.on("touchstart", (e) => this._mousedown(e, true)) 
+            .on("touchmove", (e) => this._mousemove(e, true)) 
+            .on("touchend", (e) => this._mouseup(e)) */
+            
     }
 
     draw (ctx) {

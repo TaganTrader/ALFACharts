@@ -86,9 +86,11 @@ class DataProvider {
             this.connection.send({ method: "candles", params: { from, to } }).then(candles => {
                 for (let i = 0; i < candles.length; i++) {
                     if (3 - i >= 0) {
-                        this.data[3 - i] = candles[i];
+                        if (this.data[3 - i].timestamp === candles[i].timestamp)
+                            this.data[3 - i] = candles[i];
                     } else {
-                        this.data.unshift(candles[i]);
+                        if (this.data[0].timestamp + 60 === candles[i].timestamp)
+                            this.data.unshift(candles[i]);
                     }
                 }                
                 this.__p_needData = false;

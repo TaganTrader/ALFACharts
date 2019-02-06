@@ -41,8 +41,10 @@ class PriceAxe extends Axe {
         let tick = this.layer.tick;
 
         ctx.textAlign = "center"; 
-        ctx.textBaseline = "middle";
-        ctx.font = '12px "EXO 2"';
+        ctx.textBaseline = "middle";  
+
+        ctx.font = '30px "EXO 2"';
+        
         ctx.fillStyle = theme.colors.axe_texts;
         ctx.setLineDash([0]);
 
