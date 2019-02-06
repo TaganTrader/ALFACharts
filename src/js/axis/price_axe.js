@@ -2,6 +2,9 @@
 
 import Axe from './axe'
 
+import moment from "moment";
+moment.locale('ru-RU');
+
 class PriceAxe extends Axe {
 
     constructor (parent) {
@@ -21,6 +24,7 @@ class PriceAxe extends Axe {
             return current_value * gran_factors[i % 3];
         }
         for (let i = 0;; i++) {
+            if (i > 10000) return 1000;
             if (gran >= seg) {
                 return prev_gran;
             }
@@ -28,6 +32,36 @@ class PriceAxe extends Axe {
             gran = nextGran(gran, i);
         }
         return 1000;
+    }
+
+    getTimeScale (min, max, pixel_height, pixel_spacing) {
+        let range = max - min;
+        let divisions = pixel_height / pixel_spacing; 
+        let seg = range / divisions;
+        let gran = 0.00001;
+        let prev_gran = 0.000005;
+        let gran_factors = [2.5, 2, 2];
+        let nextGran = function nextGran(current_value, i) {
+            return current_value * gran_factors[i % 3];
+        }
+        for (let i = 0;; i++) {
+            if (i > 10000) return 1000;
+            if (gran >= seg) {
+                return prev_gran;
+            }
+            prev_gran = gran;
+            gran = nextGran(gran, i);
+        }
+        return 1000;
+    }
+
+    candleIDToX(candleID) {
+        let chart = this.parent.parent;
+        let frameWidth = this.layer.frameWidth;
+        let data = this.parent.dataProvider.data;
+        
+        let offset = (data[0].timestamp - candleID ) / 60;        
+        return chart.offsetWidth - offset * frameWidth - frameWidth/2 - 1;
     }
 
     draw (ctx, theme) {
@@ -66,7 +100,7 @@ class PriceAxe extends Axe {
         price_from = now - (h / 2) / (frameHeight) * tick + scrollY / (frameHeight) * tick;
 
         
-        let div = this.getPriceScale(price_from, price_to, h / 2, this.layer.touchMode?80:50);
+        let div = this.getPriceScale(price_from, price_to, h / 2, this.layer.touchMode?70:30);
     
         price_to = Math.ceil(price_to / div) * div;
         price_from = Math.floor(price_from / div) * div;
@@ -100,6 +134,47 @@ class PriceAxe extends Axe {
             ctx.fillText(text, x - max_width / 2, scrollY + y, max_width);
         }
         this.layer.price_axe_width = max_width + 4;
+
+        let data = this.parent.dataProvider.data;
+        if (data.length > 0) 
+        {
+            let timefrom = this.parent.dataStartIndexOffset;
+            let timeto = this.parent.dataProvider.offset + Math.ceil((w + scrollX) / frameWidth);
+
+            if (timeto > data.length - 1)
+                timeto = data.length - 1;
+
+            let timefrom_ts = data[timefrom].timestamp;   
+            let timeto_ts = data[timeto].timestamp;
+            
+            div = this.getTimeScale(timeto_ts / 60, timefrom_ts / 60, w / 2, 80) * 60;            
+
+            timeto_ts = Math.ceil(timeto_ts / div) * div;
+            timefrom_ts = Math.floor(timefrom_ts / div) * div;
+
+            //to = Math.ceil(to / div) * div;
+            //timefrom = Math.floor(timefrom / div) * div;
+            ctx.textAlign = "center"; 
+            ctx.textBaseline = "middle";
+            for (let t = timeto_ts; t <= timefrom_ts; t += div) {
+                iter ++;
+                if (iter > 100) break;
+                let x = this.candleIDToX(t); // Math.round(p/60 * frameWidth + w / 2);
+
+                ctx.beginPath();
+                ctx.strokeStyle = theme.colors.axe_lines//(this.params.theme&&this.params.theme.axis_lines_color)?this.params.theme.axis_lines_color:'';
+                //ctx.strokeStyle = '#FFFFFF'; 
+                ctx.lineWidth = 1;
+                ctx.moveTo(Math.round(scrollX + x) + .5, 0);
+                ctx.lineTo(Math.round(scrollX + x) + .5, h);
+                ctx.stroke();
+                
+                
+
+                let text = moment(t * 1000).format("HH:mm");
+                ctx.fillText(text, x + scrollX, h - (this.layer.touchMode?15:9), max_width);
+            }
+        }
         
     }
 

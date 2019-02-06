@@ -1,6 +1,7 @@
 "use strict";
 
-const moment = require("moment");
+import moment from "moment";
+moment.locale('ru-RU');
 
 const default_config = {
 
@@ -69,7 +70,7 @@ class Crosshair {
             let labelHeight = 20;
             if (layer.touchMode)
                 labelHeight = Math.round(labelHeight * theme.mobile.font_scale * 0.85 / 2) * 2;        
-            ctx.fillRect(x - 60 * (layer.touchMode?theme.mobile.scale * 0.85:1), chart.offsetHeight - labelHeight, 120 * (layer.touchMode?theme.mobile.scale * 0.85:1), labelHeight);
+            ctx.fillRect(x - 50 * (layer.touchMode?theme.mobile.scale * 0.85:1), chart.offsetHeight - labelHeight, 100 * (layer.touchMode?theme.mobile.scale * 0.85:1), labelHeight);
 
             ctx.textAlign = "center"; 
             ctx.textBaseline = "middle";
@@ -78,8 +79,9 @@ class Crosshair {
             if (layer.touchMode)
                 ctx.font = (fontSize * theme.mobile.font_scale) + 'px "EXO 2"';
             else
-                ctx.font = (fontSize) + 'px "EXO 2"';          
-            text = moment(chart.dataProvider.data[frameNum].timestamp * 1000).format("YYYY-MM-DD HH:mm:ss");
+                ctx.font = (fontSize) + 'px "EXO 2"';   
+                            
+            text = moment(chart.dataProvider.data[frameNum].timestamp * 1000).format("DD MMM YY   HH:mm");
             ctx.fillText(text, x, chart.offsetHeight - (layer.touchMode?15:9));            
         }
     }
