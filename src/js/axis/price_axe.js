@@ -75,7 +75,10 @@ class PriceAxe extends Axe {
 
         let max_width = Math.max(ctx.measureText(price_from.toFixed(1)).width, ctx.measureText(price_to.toFixed(1)).width, 46);
         
-        max_width = Math.ceil(max_width / 2) * 2
+        let dec = 5;
+        if (this.layer.touchMode)
+            dec = Math.round(dec * theme.mobile.font_scale);
+        max_width = Math.ceil(max_width / dec) * dec
 
         for (let p = price_from; p <= price_to; p += div) {
             iter ++;
@@ -96,7 +99,7 @@ class PriceAxe extends Axe {
             
             ctx.fillText(text, x - max_width / 2, scrollY + y, max_width);
         }
-        this.layer.price_axe_width = max_width + 8;
+        this.layer.price_axe_width = max_width + 4;
         
     }
 
