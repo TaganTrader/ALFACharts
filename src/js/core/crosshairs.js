@@ -81,11 +81,11 @@ class Crosshair {
         frameNum = frameNum + chart.dataProvider.offset - 1;
         
         if (frameNum >= 0 && chart.dataProvider.data[frameNum]) {
-            ctx.fillStyle = "rgba(30, 30, 30, 0.7)";   
-            let labelHeight = 30;
+            ctx.fillStyle = "rgba(30, 30, 30, 0.7)";
+            let labelHeight = 20;
             if (layer.touchMode)
-                labelHeight = Math.round(labelHeight * theme.mobile.scale / 2) * 2;        
-            ctx.fillRect(x - 60 * layer.touchMode?theme.mobile.scale:1, chart.offsetHeight - labelHeight/2, 120 * layer.touchMode?theme.mobile.scale:1, labelHeight);
+                labelHeight = Math.round(labelHeight * theme.mobile.font_scale * 0.85 / 2) * 2;        
+            ctx.fillRect(x - 60 * (layer.touchMode?theme.mobile.scale * 0.85:1), chart.offsetHeight - labelHeight, 120 * (layer.touchMode?theme.mobile.scale * 0.85:1), labelHeight);
 
             ctx.textAlign = "center"; 
             ctx.textBaseline = "middle";
@@ -96,7 +96,7 @@ class Crosshair {
             else
                 ctx.font = (fontSize) + 'px "EXO 2"';          
             text = moment(chart.dataProvider.data[frameNum].timestamp * 1000).format("YYYY-MM-DD HH:mm:ss");
-            ctx.fillText(text, x, chart.offsetHeight - 9);            
+            ctx.fillText(text, x, chart.offsetHeight - (layer.touchMode?15:9));            
         }
     }
 
