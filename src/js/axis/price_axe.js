@@ -91,7 +91,7 @@ class PriceAxe extends Axe {
         let w = this.parent.parent.offsetWidth;
         let h = this.parent.parent.offsetHeight;
 
-        let x = w - 4; 
+        let x = w; 
         let max_h_count = h / frameHeight
 
         let price_from = Math.round(now / tick) * tick - Math.ceil(max_h_count / 2) * tick + Math.round((scrollY / (frameHeight) * tick) / tick) * tick;
@@ -110,7 +110,7 @@ class PriceAxe extends Axe {
         let iter = 0;
 
         let max_length = Math.max(price_from.toFixed(1).length, price_to.toFixed(1).length);
-        let max_width = Math.max(ctx.measureText('0'.repeat(max_length)).width, 46);            
+        let max_width = Math.max(ctx.measureText('0'.repeat(max_length)).width, 46) + 4 * (this.layer.touchMode?2:1);
 
         for (let p = price_from; p <= price_to; p += div) {
             iter ++;
@@ -124,7 +124,7 @@ class PriceAxe extends Axe {
             ctx.moveTo(0, Math.round(scrollY + y) + .5);
             ctx.lineTo(w - 45, Math.round(scrollY + y) + .5);
             ctx.stroke();
-                                    
+
             let text = (p).toFixed(1);             
             ctx.fillText(text, x - max_width / 2, scrollY + y, max_width);
         }
