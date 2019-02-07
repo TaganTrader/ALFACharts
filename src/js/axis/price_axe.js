@@ -109,12 +109,8 @@ class PriceAxe extends Axe {
 
         let iter = 0;
 
-        let max_width = Math.max(ctx.measureText(price_from.toFixed(1)).width, ctx.measureText(price_to.toFixed(1)).width, 46);
-        
-        let dec = 5;
-        if (this.layer.touchMode)
-            dec = Math.round(dec * theme.mobile.font_scale);
-        max_width = Math.ceil(max_width / dec) * dec
+        let max_length = Math.max(price_from.toFixed(1).length, price_to.toFixed(1).length);
+        let max_width = Math.max(ctx.measureText('0'.repeat(max_length)).width, 46);            
 
         for (let p = price_from; p <= price_to; p += div) {
             iter ++;
@@ -128,14 +124,11 @@ class PriceAxe extends Axe {
             ctx.moveTo(0, Math.round(scrollY + y) + .5);
             ctx.lineTo(w - 45, Math.round(scrollY + y) + .5);
             ctx.stroke();
-            
-            
-
-            let text = (p).toFixed(1); 
-            
+                                    
+            let text = (p).toFixed(1);             
             ctx.fillText(text, x - max_width / 2, scrollY + y, max_width);
         }
-        this.layer.price_axe_width = max_width + 4;
+        this.layer.price_axe_width = max_width;
 
         let data = this.parent.dataProvider.data;
         if (data.length > 0) 
