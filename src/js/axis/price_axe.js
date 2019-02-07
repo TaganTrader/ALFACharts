@@ -41,8 +41,10 @@ class PriceAxe extends Axe {
         let gran = 0.00001;
         let prev_gran = 0.000005;
         let gran_factors = [2.5, 2, 2];
+        //let gran_factors = [2, 3, 5, 15, 30, 60, 120, 160, 360];
+        let gf_length = gran_factors.length;
         let nextGran = function nextGran(current_value, i) {
-            return current_value * gran_factors[i % 3];
+            return current_value * gran_factors[i % gf_length];
         }
         for (let i = 0;; i++) {
             if (i > 10000) return 1000;
@@ -143,6 +145,12 @@ class PriceAxe extends Axe {
 
             if (timeto > data.length - 1)
                 timeto = data.length - 1;
+
+            if (timeto < 0)
+                timeto = 0;
+
+
+            console.log(timefrom, timeto);
 
             let timefrom_ts = data[timefrom].timestamp;   
             let timeto_ts = data[timeto].timestamp;
