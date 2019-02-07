@@ -13,21 +13,21 @@ const baseConfig = require('./webpack.base.config');
 const prodConfiguration = () => {
     return merge([
         {
-            optimization: {
-                // runtimeChunk: 'single',
-                // splitChunks: {
-                //   cacheGroups: {
-                //     vendor: {
-                //       test: /[\\/]node_modules[\\/]/,
-                //       name: 'vendors',
-                //       chunks: 'all'
-                //     }
-                //   }
-                // },
-                minimizer: [new UglifyJsPlugin({
-                    // extractComments: true, // crop comments
-                })],
-            },
+            // optimization: {
+            //     runtimeChunk: 'single',
+            //     splitChunks: {
+            //       cacheGroups: {
+            //         vendor: {
+            //           test: /[\\/]node_modules[\\/]/,
+            //           name: 'vendors',
+            //           chunks: 'all'
+            //         }
+            //       }
+            //     },
+            //     minimizer: [new UglifyJsPlugin({
+            //         // extractComments: true, // crop comments
+            //     })]
+            // },
             plugins: [
                 new MiniCssExtractPlugin(),
                 new OptimizeCssAssetsPlugin(),

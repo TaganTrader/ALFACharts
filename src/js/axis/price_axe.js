@@ -2,9 +2,6 @@
 
 import Axe from './axe'
 
-import moment from "moment";
-moment.locale('ru-RU');
-
 class PriceAxe extends Axe {
 
     constructor (parent) {

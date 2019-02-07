@@ -1,8 +1,5 @@
 "use strict";
 
-import moment from "moment";
-moment.locale('ru-RU');
-
 const default_config = {
 
 }
@@ -66,7 +63,7 @@ class Crosshair {
         frameNum = frameNum + chart.dataProvider.offset - 1;
         
         if (frameNum >= 0 && chart.dataProvider.data[frameNum]) {
-            ctx.fillStyle = "rgba(30, 30, 30, 0.7)";
+            ctx.fillStyle = "rgba(70, 70, 70, 0.9)";
             let labelHeight = 20;
             if (layer.touchMode)
                 labelHeight = Math.round(labelHeight * theme.mobile.font_scale * 0.85 / 2) * 2;        
