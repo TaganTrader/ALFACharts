@@ -148,16 +148,24 @@ class PriceAxe extends Axe {
             let timefrom_ts = zero_timestamp + -1 * (need_candle * curr_timeframe);                        
             let timeto_ts = timefrom_ts - (Math.floor((w + max_width) / frameWidth)) * curr_timeframe;
                                     
-            div = this.getTimeScale(timeto_ts / 60, timefrom_ts / 60, w / 2, 80) * 60;            
-                        
-            if (div > 450)
-                div = Math.round(div / 450) * 450;
-            if (div > 900)
-                div = Math.round(div / 900) * 900;
-            if (div > 1800)
-                div = Math.round(div / 1800) * 1800;
-            if (div > 3600)
-                div = Math.round(div / 3600) * 3600;
+            div = this.getTimeScale(timeto_ts / 60, timefrom_ts / 60, w / 2, 70) * 60;            
+                  
+            let div_tf = 5 * 60;
+            if (div > div_tf)
+                div = Math.round(div / div_tf) * div_tf;
+
+            div_tf = 15 * 60;
+            if (div > div_tf)
+                div = Math.round(div / div_tf) * div_tf;
+
+            div_tf = 30 * 60;
+            if (div > div_tf)
+                div = Math.round(div / div_tf) * div_tf;
+
+            div_tf = 60 * 60;
+            if (div > div_tf)
+                div = Math.round(div / div_tf) * div_tf;
+                
             div = Math.round(div / 60) * 60;                
 
             timeto_ts = Math.floor(timeto_ts / div) * div;
