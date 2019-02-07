@@ -267,7 +267,7 @@ class Layer {
             mc.add(new HAMMER.Tap());
 
                     
-            mc.on("tap", (e) => this._mousedown(e));
+            mc.on("tap", (e) => { /* on tap */ } );
             mc.on("panstart", (e) => this._mousedown(e));
             mc.on("panmove", (e) => this._mousemove(e));
             mc.on("panend", (e) => this._mouseup(e));
