@@ -275,7 +275,7 @@ class Layer {
             .mouseup((e)    => this.touchMode?()=>{}:this._mouseup(e))
             .mouseleave((e) => this._mouseleave(e))
             .mouseenter((e) => this._mouseenter(e))
-            .dblclick((e)   => this.touchMode?()=>{}:this._doubleclick(e))
+            .dblclick((e)   => this._doubleclick(e))
             .on("wheel", (e) => this._mousewheel(e))
             /*.on("touchstart", (e) => this._mousedown(e, true)) 
             .on("touchmove", (e) => this._mousemove(e, true)) 
