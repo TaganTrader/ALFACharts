@@ -149,9 +149,7 @@ class PriceAxe extends Axe {
             let timeto_ts = timefrom_ts - (Math.floor((w + max_width) / frameWidth)) * curr_timeframe;
                                     
             div = this.getTimeScale(timeto_ts / 60, timefrom_ts / 60, w / 2, 80) * 60;            
-                
-            console.log(div / 60)
-
+                            
             let div_tf = 3 * 60;
             if (div > div_tf)
                 div = Math.round(div / div_tf) * div_tf;
