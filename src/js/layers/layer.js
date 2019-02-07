@@ -167,7 +167,7 @@ class Layer {
         this.mouseY = -100;
         this.mouse_in = false;
         this.mousedowned = false;
-        this.draw();
+        this._mouseup(e);
     }
 
     _mouseenter(e) {
@@ -177,14 +177,6 @@ class Layer {
     _mousewheel (e) {
         e.preventDefault();   
         event.cancelBubble = true;        
-        
-       
-
-
-        //alert(JSON.stringify(e))
-       
-
-        
         
         if (e.originalEvent) 
             e = e.originalEvent;        

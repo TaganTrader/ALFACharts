@@ -23,7 +23,7 @@ class Connection extends EventEmitter
 
     send (msg) {        
         return new Promise((resolve, reject) => {
-            msg.qid = ++this.query_id;
+            msg.qid = ++this.query_id;            
             let timeout = setTimeout(() => { reject() }, 2000);
             this.queries_callbacks[msg.qid] = data => { clearTimeout(timeout); resolve(data) };
             if (this.ws.readyState === 1)
@@ -34,7 +34,7 @@ class Connection extends EventEmitter
     }
 
     on_message (event) {
-        let data = JSON.parse(event.data);          
+        let data = JSON.parse(event.data);        
         if (data.method)
         {            
             if (typeof this.processing[data.method] === "function")

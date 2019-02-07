@@ -59,7 +59,7 @@ class PriceAxe extends Axe {
         let frameWidth = this.layer.frameWidth;
         let data = this.parent.dataProvider.data;
         
-        let offset = (data[0].timestamp - candleID ) / 60;        
+        let offset = (data[0].timestamp - candleID) / 60;
         return chart.offsetWidth - offset * frameWidth - frameWidth/2 - 1;
     }
 
@@ -128,6 +128,7 @@ class PriceAxe extends Axe {
         this.layer.price_axe_width = max_width;
 
         let data = this.parent.dataProvider.data;
+        let data_offset = this.parent.dataProvider.offset;
         let curr_timeframe = this.parent.dataProvider.timeframe;
 
         if (data.length > 0) 
@@ -139,14 +140,16 @@ class PriceAxe extends Axe {
                 timeto = data.length - 1;
 
             if (timeto < 0)
-                timeto = 0;
-
+                timeto = 0;            
 
             let need_candle = Math.ceil((scrollX + max_width) / frameWidth);
-            let zero_timestamp = data[0].timestamp;
+            let zero_timestamp = data[data_offset].timestamp;
+
+            console.log(moment(zero_timestamp * 1000).format("YY-MM-DD HH:mm"));
 
             let timefrom_ts = zero_timestamp + -1 * (need_candle * curr_timeframe);                        
             let timeto_ts = timefrom_ts - (Math.floor((w + max_width) / frameWidth)) * curr_timeframe;
+            
                                     
             div = this.getTimeScale(timeto_ts / 60, timefrom_ts / 60, w / 2, 80) * 60;            
                             
@@ -195,6 +198,8 @@ class PriceAxe extends Axe {
             timeto_ts = Math.floor(timeto_ts / div) * div;
             timefrom_ts = Math.floor(timefrom_ts / div) * div;
 
+            //console.log(moment(timefrom_ts * 1000).format("HH:mm"), moment(timeto_ts * 1000).format("HH:mm")); 
+
             //to = Math.ceil(to / div) * div;
             //timefrom = Math.floor(timefrom / div) * div;
             ctx.textAlign = "center"; 
@@ -202,7 +207,9 @@ class PriceAxe extends Axe {
             for (let t = timeto_ts; t <= timefrom_ts; t += div) {
                 iter ++;
                 if (iter > 100) break;
-                let x = this.candleIDToX(t); // Math.round(p/60 * frameWidth + w / 2);
+
+                let offset = (data[data_offset].timestamp - t) / 60;
+                let x = chart.offsetWidth - offset * frameWidth - frameWidth/2 - 1;
 
                 ctx.beginPath();
                 ctx.strokeStyle = theme.colors.axe_lines//(this.params.theme&&this.params.theme.axis_lines_color)?this.params.theme.axis_lines_color:'';

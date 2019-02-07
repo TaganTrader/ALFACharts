@@ -27,9 +27,9 @@ class DataProvider {
 
         this.timeframe = 60;
 
-        setInterval(() => {
+        /*setInterval(() => {
            this.update();
-        }, 1500);
+        }, 1500);*/
     }    
 
     connection_open ()
@@ -41,7 +41,7 @@ class DataProvider {
     needLastData()
     {        
         if (!this.__p_needData && this.data.length > 0) {
-            this.__p_needData = true;            
+            this.__p_needData = true;
             let to = this.data[this.data.length - 1].timestamp - 60;
             if (to < 1483228740)
             {
@@ -85,6 +85,11 @@ class DataProvider {
             this.__p_needData = true;            
             let from = this.data[3].timestamp;
             let to = Math.floor(new Date().getTime() / 1000) + 5 * 60;
+            // скорее всего заружены исторические данные
+            if (from - to > 1000) {
+                this.__p_needData = false;
+                return;
+            }
             this.connection.send({ method: "candles", params: { from, to } }).then(candles => {
                 for (let i = 0; i < candles.length; i++) {
                     if (3 - i >= 0) {
@@ -106,13 +111,14 @@ class DataProvider {
     {        
         if (!this.__p_needData) {
             this.__p_needData = true;
-            this.connection.send({ method: "candles", params: { from: timeframe - 500 * 60, to: timeframe + 500 * 60 }}).then(candles => {
+            this.connection.send({ method: "candles", params: { from: timeframe - 500 * 60, to: timeframe + 500 * 60 }}).then(candles => {                
                 candles.reverse();
                 if (toMiddle)
                     this.offset = 500//candles.length / 2;
                 else
                     this.offset = 0;
                 this.data = candles;
+                
                 this.__p_needData = false;                
             }).catch (() => {
                 this.__p_needData = false;
