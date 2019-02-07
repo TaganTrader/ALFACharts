@@ -37,7 +37,7 @@ class PriceAxe extends Axe {
         let seg = range / divisions;
         let gran = 0.00001;
         let prev_gran = 0.000005;
-        let gran_factors = [2.5, 2, 2];
+        let gran_factors = [1.5];
         //let gran_factors = [2, 3, 5, 15, 30, 60, 120, 160, 360];
         let gf_length = gran_factors.length;
         let nextGran = function nextGran(current_value, i) {
@@ -148,9 +148,15 @@ class PriceAxe extends Axe {
             let timefrom_ts = zero_timestamp + -1 * (need_candle * curr_timeframe);                        
             let timeto_ts = timefrom_ts - (Math.floor((w + max_width) / frameWidth)) * curr_timeframe;
                                     
-            div = this.getTimeScale(timeto_ts / 60, timefrom_ts / 60, w / 2, 70) * 60;            
-                  
-            let div_tf = 5 * 60;
+            div = this.getTimeScale(timeto_ts / 60, timefrom_ts / 60, w / 2, 80) * 60;            
+                
+            console.log(div / 60)
+
+            let div_tf = 3 * 60;
+            if (div > div_tf)
+                div = Math.round(div / div_tf) * div_tf;
+
+            div_tf = 5 * 60;
             if (div > div_tf)
                 div = Math.round(div / div_tf) * div_tf;
 
@@ -165,6 +171,26 @@ class PriceAxe extends Axe {
             div_tf = 60 * 60;
             if (div > div_tf)
                 div = Math.round(div / div_tf) * div_tf;
+
+            div_tf = 120 * 60;
+            if (div > div_tf)
+                div = Math.round(div / div_tf) * div_tf;                 
+                
+            div_tf = 240 * 60;
+            if (div > div_tf)
+                div = Math.round(div / div_tf) * div_tf;
+                
+            div_tf = 360 * 60;
+            if (div > div_tf)
+                div = Math.round(div / div_tf) * div_tf;   
+                
+            div_tf = 720 * 60;
+            if (div > div_tf)
+                div = Math.round(div / div_tf) * div_tf;    
+                
+            div_tf = 1440 * 60;
+            if (div > div_tf)
+                div = Math.round(div / div_tf) * div_tf;                     
                 
             div = Math.round(div / 60) * 60;                
 
