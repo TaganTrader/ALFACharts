@@ -131,6 +131,8 @@ class PriceAxe extends Axe {
         this.layer.price_axe_width = max_width;
 
         let data = this.parent.dataProvider.data;
+        let curr_timeframe = this.parent.dataProvider.timeframe;
+
         if (data.length > 0) 
         {
             let timefrom = this.parent.dataStartIndexOffset;
@@ -143,14 +145,25 @@ class PriceAxe extends Axe {
                 timeto = 0;
 
 
-            console.log(timefrom, timeto);
+            let need_candle = Math.ceil((scrollX + max_width) / frameWidth);
+            let zero_timestamp = data[0].timestamp;
 
-            let timefrom_ts = data[timefrom].timestamp;   
-            let timeto_ts = data[timeto].timestamp;
-            
+            let timefrom_ts = zero_timestamp + -1 * (need_candle * curr_timeframe);                        
+            let timeto_ts = timefrom_ts - (Math.floor((w + max_width) / frameWidth)) * curr_timeframe;
+                                    
             div = this.getTimeScale(timeto_ts / 60, timefrom_ts / 60, w / 2, 80) * 60;            
+                        
+            if (div > 450)
+                div = Math.round(div / 450) * 450;
+            if (div > 900)
+                div = Math.round(div / 900) * 900;
+            if (div > 1800)
+                div = Math.round(div / 1800) * 1800;
+            if (div > 3600)
+                div = Math.round(div / 3600) * 3600;
+            div = Math.round(div / 60) * 60;                
 
-            timeto_ts = Math.ceil(timeto_ts / div) * div;
+            timeto_ts = Math.floor(timeto_ts / div) * div;
             timefrom_ts = Math.floor(timefrom_ts / div) * div;
 
             //to = Math.ceil(to / div) * div;
@@ -169,9 +182,7 @@ class PriceAxe extends Axe {
                 ctx.moveTo(Math.round(scrollX + x) + .5, 0);
                 ctx.lineTo(Math.round(scrollX + x) + .5, h);
                 ctx.stroke();
-                
-                
-
+                            
                 let text = moment(t * 1000).format("HH:mm");
                 ctx.fillText(text, x + scrollX, h - (this.layer.touchMode?15:9), max_width);
             }
