@@ -25,6 +25,8 @@ class DataProvider {
 
         this.data = [];
 
+        this.timeframe = 60;
+
         setInterval(() => {
            this.update();
         }, 1500);

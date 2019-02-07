@@ -71,6 +71,8 @@ class Orders
                     labelHeight);
 
                 ctx.fillStyle = theme.colors.orders.buy.label_text;            
+                let text_ = (orders[i].orderQty).toLocaleString(); 
+                ctx.fillText(text_, x + 35 * theme.mobile.font_scale, scrollY + y - 12, 65 * theme.mobile.font_scale);
             } else {
                 color = theme.colors.orders.sell.lines;
                 ctx.beginPath();
@@ -91,9 +93,9 @@ class Orders
                     labelHeight);
                 
                 ctx.fillStyle = theme.colors.orders.sell.label_text;                
-            }
-            let text_ = (orders[i].orderQty).toLocaleString(); 
-            ctx.fillText(text_, x + 35 * theme.mobile.font_scale, scrollY + y - 12, 65 * theme.mobile.font_scale);
+                let text_ = (orders[i].orderQty).toLocaleString(); 
+                ctx.fillText(text_, x + 35 * theme.mobile.font_scale, scrollY + y - 12, 65 * theme.mobile.font_scale);
+            }            
 
             ctx.textAlign = "center"; 
             ctx.textBaseline = "middle";            
