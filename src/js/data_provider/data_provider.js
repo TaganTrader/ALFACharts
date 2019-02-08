@@ -34,8 +34,9 @@ class DataProvider {
 
     connection_open ()
     {        
+        //this.moveTo(new Date('2019-02-06 00:00:00').getTime() / 1000, true);
         //this.moveTo(new Date('2017-03-03 00:00:00').getTime() / 1000, true);
-        this.moveTo(new Date().getTime() / 1000, false); 
+        this.moveTo(new Date().getTime() / 1000, false);         
     }
 
     needLastData()

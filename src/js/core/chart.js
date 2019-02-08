@@ -46,6 +46,8 @@ class ALFAChart extends EventEmitter {
     }    
 
     _init () {
+        this.dataProvider = new DataProvider(this);
+
         this.area = document.createElement('div');
         $(this.area).addClass('ac_workarea');
 
@@ -69,7 +71,7 @@ class ALFAChart extends EventEmitter {
         this._resize();
         this.clear();
 
-        this.dataProvider = new DataProvider(this);
+        
         this.layer = new CandleLayer(this);        
         this.crosshair = new Crosshair(this);
 
