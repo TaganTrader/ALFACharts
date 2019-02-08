@@ -70,7 +70,7 @@ class Orders
                     Math.round(70 * theme.mobile.font_scale), 
                     labelHeight);
 
-                ctx.fillStyle = theme.colors.orders.buy.label_text;            
+                ctx.fillStyle = theme.colors.orders.buy.label_text;         
                 let text_ = (orders[i].orderQty).toLocaleString(); 
                 ctx.fillText(text_, x + 35 * theme.mobile.font_scale, scrollY + y + 10 * theme.mobile.scale, 65 * theme.mobile.font_scale);
             } else {

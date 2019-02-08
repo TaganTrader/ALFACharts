@@ -27,9 +27,9 @@ class DataProvider {
 
         this.timeframe = 60;
 
-        /*setInterval(() => {
+        setInterval(() => {
            this.update();
-        }, 1500);*/
+        }, 1500);
     }    
 
     connection_open ()

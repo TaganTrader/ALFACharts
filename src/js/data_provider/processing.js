@@ -35,7 +35,7 @@ class Processing
                 high: price,
                 low: price,
             });
-            this.dataProvider.update();            
+            //this.dataProvider.update();
             this.chart.layer.draw();
         }        
         
