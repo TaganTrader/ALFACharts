@@ -55,7 +55,7 @@ class Connection extends EventEmitter
     }
 
     on_error (error) {
-        console.log("Ошибка " + error.message);
+        //console.log("Ошибка " + error.message);
         setTimeout(() => {
             this._init(this.processing, this.address);
         }, 1000);
@@ -63,12 +63,12 @@ class Connection extends EventEmitter
 
     on_close (event) {
         if (event.wasClean) {
-            console.log('Соединение закрыто чисто');
+            //console.log('Соединение закрыто чисто');
             return;
         } else {
-            console.log('Обрыв соединения'); // например, "убит" процесс сервера
+            //console.log('Обрыв соединения'); // например, "убит" процесс сервера
         }
-        console.log('Код: ' + event.code + ' причина: ' + event.reason);
+        //console.log('Код: ' + event.code + ' причина: ' + event.reason);
         setTimeout(() => {
             this._init(this.processing, this.address);
         }, 1000);

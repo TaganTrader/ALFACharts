@@ -87,15 +87,18 @@ class DataProvider {
             let from = this.data[3].timestamp;
             let to = Math.floor(new Date().getTime() / 1000) + 5 * 60;
             // скорее всего заружены исторические данные
-            if (from - to > 1000) {
+            if (Math.abs(from - to) > 1000) {
                 this.__p_needData = false;
                 return;
             }
             this.connection.send({ method: "candles", params: { from, to } }).then(candles => {
                 for (let i = 0; i < candles.length; i++) {
-                    if (3 - i >= 0) {
-                        if (this.data[3 - i].timestamp === candles[i].timestamp)
+                    if (3 - i == 0) {} else
+                    if (3 - i > 0) {
+                        if (this.data[3 - i].timestamp === candles[i].timestamp) {
                             this.data[3 - i] = candles[i];
+                            //console.log('Успешное обновление ', 3 - i);
+                        }                            
                     } else {
                         if (this.data[0].timestamp + 60 === candles[i].timestamp)
                             this.data.unshift(candles[i]);
