@@ -145,7 +145,7 @@ class PriceAxe extends Axe {
             let need_candle = Math.ceil((scrollX + max_width) / frameWidth);
             let zero_timestamp = data[data_offset].timestamp;
 
-            console.log(moment(zero_timestamp * 1000).format("YY-MM-DD HH:mm"));
+            //console.log(moment(zero_timestamp * 1000).format("YY-MM-DD HH:mm"));
 
             let timefrom_ts = zero_timestamp + -1 * (need_candle * curr_timeframe);                        
             let timeto_ts = timefrom_ts - (Math.floor((w + max_width) / frameWidth)) * curr_timeframe;
