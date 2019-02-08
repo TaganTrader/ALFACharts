@@ -31,7 +31,7 @@ class Processing
             this.dataProvider.data.unshift({
                 timestamp: timestamp,
                 close: price,
-                open: price,
+                open: this.dataProvider.data[0].close,
                 high: price,
                 low: price,
             });
