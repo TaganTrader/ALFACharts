@@ -87,6 +87,7 @@ class Layer {
         this.baseMouseX = offsetX - this.scrollX;
         this.baseMouseY = offsetY - this.scrollY;
         this.baseScrollX = this.scrollX;
+        this.baseFrameWidth = this.frameWidth;
         this.baseFrameHeight = this.frameHeight;
         return false;
     }
@@ -126,12 +127,16 @@ class Layer {
         
         this.mouseX = offsetX;
         this.mouseY = offsetY;
+        let timePanelHeight = 20;        
+        if (this.touchMode)
+            timePanelHeight *= 2; //// Условно. А вообще нужно пробраться к теме и забрать оттуда мобильный скейл
 
         if (this.mousedowned) {
-            if (this.baseMouseX + this.baseScrollX <= chart.offsetWidth - this.price_axe_width) {     
+            if (this.baseMouseX + this.baseScrollX <= chart.offsetWidth - this.price_axe_width && 
+                this.baseMouseY <= chart.offsetHeight - timePanelHeight) {     
                 this.scrollX = offsetX - this.baseMouseX;
                 this.scrollY = offsetY - this.baseMouseY;
-            } else {
+            } else if (this.baseMouseX + this.baseScrollX > chart.offsetWidth - this.price_axe_width) {
                 this.parent.layer.autosize = false;
                 let h = chart.offsetHeight;
                 let start = Math.log2(100);                      
@@ -142,7 +147,25 @@ class Layer {
                     this.frameHeight = this.baseFrameHeight * delta;
                 if (this.frameHeight > this.config.maxFrameHeight)
                     this.frameHeight = this.config.maxFrameHeight;
-            }                  
+            } else {                
+                let oldWidth = this.frameWidth;
+                let w = chart.offsetWidth;
+                let start = Math.log2(100);                      
+                let delta = (Math.abs(Math.log2(100 + 100 / w * Math.abs(offsetX - this.baseMouseX - this.baseScrollX)) ) - start) * 4 + 1;                         
+                if (offsetX - this.baseMouseX - this.baseScrollX >= 0) 
+                    this.frameWidth = this.baseFrameWidth / delta;      
+                else
+                    this.frameWidth = this.baseFrameWidth * delta;
+                
+                if (this.frameWidth < 0.5)
+                    this.frameWidth = 0.5;
+                if (this.frameWidth > 150)
+                    this.frameWidth = 150;
+
+                let diff = this.frameWidth - oldWidth;
+                //console.log(this.parent.layer.dataStartIndexOffset, this.frameNum)
+                this.scrollX = this.scrollX + diff * this.parent.layer.dataStartIndexOffset - diff / 2;    
+            }
         }                          
         this.draw();
     }
@@ -242,6 +265,7 @@ class Layer {
         this.mouse_in = false;
         this.mousedowned = false;
         this.now = 0;
+        this.baseFrameWidth = 0;
         this.baseFrameHeight = 0;
         this.price_axe_width = 46;        
 
