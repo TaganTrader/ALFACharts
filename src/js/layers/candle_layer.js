@@ -153,7 +153,27 @@ class CandleLayer {
 
             ctx.moveTo(x - .5, high);
             ctx.lineTo(x - .5, low);
-            ctx.stroke();
+            ctx.stroke();            
+            
+            /* // Видно внутри тень свечи
+            var grd = ctx.createLinearGradient(0, y, 0, y + height + 1);
+            grd.addColorStop(0, color);
+            if (data[i].close >= data[i].open) {
+                grd.addColorStop(0.5, "rgba(102, 204, 102, 0.5)");
+            } else {
+                grd.addColorStop(0.5, "rgba(237, 104, 74, 0.5)");
+            }
+            grd.addColorStop(1, color);  */   
+
+            /* // Градиент с прозрачностью вниз
+            var grd = ctx.createLinearGradient(0, y, 0, y + height + 1);
+            grd.addColorStop(0, color);
+            if (data[i].close >= data[i].open) {
+                grd.addColorStop(1, "rgba(102, 204, 102, 0.5)");
+            } else {
+                grd.addColorStop(1, "rgba(237, 104, 74, 0.5)");
+            }            
+            ctx.fillStyle=grd;*/
 
             ctx.fillRect(
                 Math.round(x - candle_width / 2) - 1, 

@@ -115,7 +115,7 @@ class DataProvider {
     {        
         if (!this.__p_needData) {
             this.__p_needData = true;
-            this.connection.send({ method: "candles", params: { from: timeframe - 500 * 60, to: timeframe + 500 * 60 }}).then(candles => {                
+            this.connection.send({ method: "candles", params: { from: timeframe - 1000 * 60, to: timeframe + 0 * 60 }}).then(candles => {                
                 candles.reverse();
                 if (toMiddle)
                     this.offset = 500//candles.length / 2;

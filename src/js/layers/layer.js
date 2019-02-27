@@ -77,6 +77,8 @@ class Layer {
             offsetY = (e.touches[0].pageY - e.touches[0].target.offsetTop) * chart.ratio;
         }
 
+
+        //// TODO: e resize cursor
         if (e.offsetX <= chart.offsetWidth - this.price_axe_width)
             $(chart.linen).parent().addClass('ac_chart_cur_grabbing');
         else

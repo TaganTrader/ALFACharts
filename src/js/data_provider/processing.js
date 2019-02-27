@@ -23,8 +23,11 @@ class Processing
             this.dataProvider.data[0].close = price;
             this.dataProvider.data[0].high = Math.max(this.dataProvider.data[0].high, price);
             this.dataProvider.data[0].low = Math.min(this.dataProvider.data[0].low, price);
-            if (lastPrice !== price)
-                this.chart.layer.draw();            
+            if (lastPrice !== price) {
+                /*if (Math.abs(price - this.chart.layer.layer.now) > 0.5)
+                    this.chart.layer.layer.now = price;*/
+                this.chart.layer.draw();
+            }
         }
 
         if (this.dataProvider.data[0].timestamp + 60 === timestamp) {
