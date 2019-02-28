@@ -6,6 +6,7 @@ import TimeAxe from '../axis/time_axe'
 import Orders from '../trading/orders';
 import lodash from 'lodash';
 import Positions from '../trading/positions';
+import Points from '../trading/points';
 
 const default_config = {
     frameWidth: 12,
@@ -42,6 +43,7 @@ class CandleLayer {
 
         this.orders = new Orders(this, this.dataProvider.orders);   
         this.positions = new Positions(this, this.dataProvider.positions);        
+        this.points = new Points(this, this.dataProvider.points);        
         this.dataStartIndexOffset = 0;
     }
 
@@ -63,7 +65,7 @@ class CandleLayer {
     }
 
     autosize_layer() {
-        let chart = this.parent;        
+        let chart = this.parent;
         
         if (this.dataProvider.data.length == 0) return;        
 
@@ -81,6 +83,32 @@ class CandleLayer {
         let diff = (now - price) / this.tick * frameHeight;
         return this.parent.offsetHeight / 2 + diff;
     }    
+
+    timestampToCoords(timestamp) {
+        let chart = this.parent;
+        let frameWidth = this.layer.frameWidth;
+        let data = this.dataProvider.data;
+
+        if (this.dataProvider.data.length == 0) return 0;   
+
+        timestamp = Math.floor(timestamp / 1000 / 60) * 60;
+
+        let offset = (data[0].timestamp - timestamp) / 60;        
+        return chart.offsetWidth - offset * frameWidth - frameWidth / 2;
+    }
+
+    timestampToCandle(timestamp) {
+        let chart = this.parent;
+        let frameWidth = this.layer.frameWidth;
+        let data = this.dataProvider.data;
+
+        if (this.dataProvider.data.length == 0) return 0;   
+
+        timestamp = Math.floor(timestamp / 1000 / 60) * 60;
+
+        let offset = (data[0].timestamp - timestamp) / 60;        
+        return data[offset];
+    }
 
     draw_candles (ctx, theme) {
         let chart = this.parent;
@@ -282,6 +310,7 @@ class CandleLayer {
         this.draw_candles(ctx, theme);
         this.orders.draw(ctx, theme);
         this.positions.draw(ctx, theme);
+        this.points.draw(ctx, theme);
         this.draw_price(ctx, theme);
         this.parent.crosshair.draw(ctx, this.layer, theme);
     }

@@ -21,6 +21,30 @@ class DataProvider {
         
         this.positions = [
                
+        ];
+
+        this.points = [
+            // { 
+            //     name: "short", 
+            //     side: "right",                
+            //     price: 3823.5,
+            //     timestamp: new Date('2019-02-28 17:02:23').getTime(),
+            //     type: "limit",
+            // },
+            // { 
+            //     name: "long", 
+            //     side: "left",
+            //     price: 3819,
+            //     timestamp: new Date('2019-02-28 17:15:11').getTime(),
+            //     type: "limit",
+            // },
+            // { 
+            //     name: "stop_long", 
+            //     side: "right",
+            //     price: 3816.5,
+            //     timestamp: new Date('2019-02-28 17:28:11').getTime(),
+            //     type: "stop",
+            // }
         ]
 
         this.data = [];

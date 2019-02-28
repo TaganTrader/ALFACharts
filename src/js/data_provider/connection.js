@@ -9,6 +9,7 @@ class Connection extends EventEmitter
         this._init(processing, address);        
         this.query_id = new Date().getTime();
         this.queries_callbacks = [];
+        this.reconnectTimer = 0;
     }
 
     _init (processing, address)
@@ -56,7 +57,8 @@ class Connection extends EventEmitter
 
     on_error (error) {
         //console.log("Ошибка " + error.message);
-        setTimeout(() => {
+        clearTimeout(this.reconnectTimer);
+        this.reconnectTimer = setTimeout(() => {
             this._init(this.processing, this.address);
         }, 1000);
     }
@@ -69,7 +71,8 @@ class Connection extends EventEmitter
             //console.log('Обрыв соединения'); // например, "убит" процесс сервера
         }
         //console.log('Код: ' + event.code + ' причина: ' + event.reason);
-        setTimeout(() => {
+        clearTimeout(this.reconnectTimer);
+        this.reconnectTimer = setTimeout(() => {
             this._init(this.processing, this.address);
         }, 1000);
         
