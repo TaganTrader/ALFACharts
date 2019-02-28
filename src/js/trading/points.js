@@ -92,6 +92,8 @@ class Points
 
             let candle = layer.timestampToCandle(points[i].timestamp);
 
+            if (!candle) continue;
+
             let text_y_up = layer.priceToCoords(candle.high) - 15; 
             let text_y_down = layer.priceToCoords(candle.low) + 15; 
 
