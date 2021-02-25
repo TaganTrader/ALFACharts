@@ -110,7 +110,7 @@ class Positions
                 ctx.fillStyle = theme.colors.positions.long.price_text;
             else
                 ctx.fillStyle = theme.colors.positions.short.price_text;
-            let text = positions[i].avgEntryPrice.toFixed(chart.config.decimals);
+            let text = positions[i].avgEntryPrice.toFixed(layer.parent.config.decimals);
             ctx.fillText(text, w - layer.layer.price_axe_width / 2, y + scrollY);
         }
     }

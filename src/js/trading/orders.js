@@ -110,7 +110,7 @@ class Orders
                 ctx.fillStyle = theme.colors.orders.buy.price_text;
             else
                 ctx.fillStyle = theme.colors.orders.sell.price_text;
-            let text = orders[i].price.toFixed(chart.config.decimals);
+            let text = orders[i].price.toFixed(layer.parent.config.decimals);
             ctx.fillText(text, w - layer.layer.price_axe_width / 2, y + scrollY);
         }
     }

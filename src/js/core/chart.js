@@ -37,7 +37,10 @@ function GetZoomLevel() {
 class ALFAChart extends EventEmitter {
     constructor (el_id, config) {
         super();
-        this.el = $("#" + el_id);
+        if (typeof el_id === "string")
+            this.el = $("#" + el_id);
+        else
+            this.el = $(el_id);
         this.config = lodash.extend({}, default_config, config);
 
         this.offsetWidth = 0;
