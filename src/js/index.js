@@ -1,12 +1,12 @@
 import ALFAChart from "./core/chart"
 
-moment.locale('ru-RU');
+moment.locale('en-EN');
 
 window.ALFAChart = ALFAChart;
 
 
 // temp for delete
-//window.$ = $; 
+//window.$ = $;
 
 
 import '../css/chart.styl';

@@ -7,39 +7,39 @@ class DataProvider {
 
     constructor (chart) {
         this.processing = new Processing(this, chart);
-        this.connection = new Connection(this.processing, "wss://ds1.texer.org:8443");
+        //this.connection = new Connection(this.processing, ""); //wss://ds1.texer.org:8443
 
-        this.connection.ws.onopen = () => { this.connection_open() };
+        //this.connection.ws.onopen = () => { this.connection_open() };
 
         this.tick = 0.05;
 
         this.offset = 0;
 
         this.orders = [
-            
+
         ];
-        
+
         this.positions = [
-               
+
         ];
 
         this.points = [
-            // { 
-            //     name: "short", 
-            //     side: "right",                
+            // {
+            //     name: "short",
+            //     side: "right",
             //     price: 3823.5,
             //     timestamp: new Date('2019-02-28 17:02:23').getTime(),
             //     type: "limit",
             // },
-            // { 
-            //     name: "long", 
+            // {
+            //     name: "long",
             //     side: "left",
             //     price: 3819,
             //     timestamp: new Date('2019-02-28 17:15:11').getTime(),
             //     type: "limit",
             // },
-            // { 
-            //     name: "stop_long", 
+            // {
+            //     name: "stop_long",
             //     side: "right",
             //     price: 3816.5,
             //     timestamp: new Date('2019-02-28 17:28:11').getTime(),
@@ -54,17 +54,17 @@ class DataProvider {
         setInterval(() => {
            this.update();
         }, 1500);
-    }    
+    }
 
     connection_open ()
-    {        
+    {
         //this.moveTo(new Date('2019-02-06 00:00:00').getTime() / 1000, true);
         //this.moveTo(new Date('2017-03-03 00:00:00').getTime() / 1000, true);
-        this.moveTo(new Date().getTime() / 1000, false);         
+        this.moveTo(new Date().getTime() / 1000, false);
     }
 
     needLastData()
-    {        
+    {
         if (!this.__p_needData && this.data.length > 0) {
             this.__p_needData = true;
             let to = this.data[this.data.length - 1].timestamp - 60;
@@ -81,13 +81,13 @@ class DataProvider {
                 this.__p_needData = false;
             });
         }
-        
+
     }
 
     needNextData()
-    {                
+    {
         if (!this.__p_needData) {
-            this.__p_needData = true;            
+            this.__p_needData = true;
             let from = this.data[0].timestamp + 60;
             // Не запрашивать свечи которых не может быть.
             if (from > new Date().getTime() / 1000 + 5 * 60) {
@@ -96,13 +96,13 @@ class DataProvider {
             }
             this.connection.send({ method: "candles", params: { from: from, to: from + 1000 * 60 } }).then(candles => {
                 candles.reverse();
-                this.offset += candles.length;                
-                this.data = candles.concat(this.data);                
+                this.offset += candles.length;
+                this.data = candles.concat(this.data);
                 this.__p_needData = false;
             }).catch (() => {
                 this.__p_needData = false;
             });
-        }        
+        }
     }
 
     update() {
@@ -122,7 +122,7 @@ class DataProvider {
                         if (this.data[3 - i].timestamp === candles[i].timestamp) {
                             this.data[3 - i] = candles[i];
                             //console.log('Успешное обновление ', 3 - i);
-                        }             
+                        }
                     } else {
                         if (this.data[0].timestamp + 60 === candles[i].timestamp)
                             this.data.unshift(candles[i]);
@@ -132,22 +132,22 @@ class DataProvider {
             }).catch (() => {
                 this.__p_needData = false;
             });
-        }  
+        }
     }
 
     moveTo(timeframe, toMiddle)
-    {        
+    {
         if (!this.__p_needData) {
             this.__p_needData = true;
-            this.connection.send({ method: "candles", params: { from: timeframe - 1000 * 60, to: timeframe + 0 * 60 }}).then(candles => {                
+            this.connection.send({ method: "candles", params: { from: timeframe - 1000 * 60, to: timeframe + 0 * 60 }}).then(candles => {
                 candles.reverse();
                 if (toMiddle)
                     this.offset = 500//candles.length / 2;
                 else
                     this.offset = 0;
                 this.data = candles;
-                
-                this.__p_needData = false;                
+
+                this.__p_needData = false;
             }).catch (() => {
                 this.__p_needData = false;
             });

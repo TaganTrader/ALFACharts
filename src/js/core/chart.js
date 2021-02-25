@@ -12,6 +12,8 @@ import DataProvider from "../data_provider/data_provider"
 const default_config = {
     width: "auto",
     theme: "DefaultDark",
+    locale: 'en-EN',
+    decimals: 2,
 }
 
 function GetZoomLevel() {
@@ -43,6 +45,7 @@ class ALFAChart extends EventEmitter {
 
         this.theme = new Theme(this.config.theme);
         this._init();
+        moment.locale(config.locale);
     }
 
     _init () {
