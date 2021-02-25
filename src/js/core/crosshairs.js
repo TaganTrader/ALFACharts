@@ -38,7 +38,8 @@ class Crosshair {
         ctx.fillStyle = "rgb(255, 255, 255)";
 
         let price = (layer.now + (chart.offsetHeight / 2 - y + chart.layer.layer.scrollY) / layer.frameHeight * layer.tick);
-        price = (Math.round(price / 0.5) * 0.5).toFixed(chart.config.decimals);
+        let roundDecimals = chart.config.roundDecimals ? chart.config.roundDecimals : 0.5;
+        price = (Math.round(price / roundDecimals) * roundDecimals).toFixed(chart.config.decimals);
         let text = price;
 
 
