@@ -209,7 +209,7 @@ class PriceAxe extends Axe {
                 if (iter > 100) break;
 
                 let offset = (data[data_offset].timestamp - t) / 60;
-                let x = chart.offsetWidth - offset * frameWidth - frameWidth/2 - 1;
+                let x = this.parent.parent.offsetWidth - offset * frameWidth - frameWidth/2 - 1;
 
                 ctx.beginPath();
                 ctx.strokeStyle = theme.colors.axe_lines//(this.params.theme&&this.params.theme.axis_lines_color)?this.params.theme.axis_lines_color:'';

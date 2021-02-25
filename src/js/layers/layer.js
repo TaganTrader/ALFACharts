@@ -57,20 +57,20 @@ class Layer {
         };
     };
 
-    _mousedown(e, touch) {   
-        e.preventDefault();   
-        event.cancelBubble = true;       
+    _mousedown(e, touch) {
+        e.preventDefault();
+        event.cancelBubble = true;
         let chart = this.parent;
         let offsetX = e.offsetX * chart.ratio;
         let offsetY = e.offsetY * chart.ratio;
-        
+
 
         if (e.center) {
             let offset = this.offset(chart.linen);
             offsetX = (e.srcEvent.pageX - offset.left) * chart.ratio;
             offsetY = (e.srcEvent.pageY - offset.top) * chart.ratio;
         }
-        
+
 
         if (touch) {
             offsetX = (e.touches[0].pageX - e.touches[0].target.offsetLeft) * chart.ratio;
@@ -83,8 +83,8 @@ class Layer {
             $(chart.linen).parent().addClass('ac_chart_cur_grabbing');
         else
             $(chart.linen).parent().addClass('ac_chart_cur_n-resize');
-    
- 
+
+
         this.mousedowned = true;
         this.baseMouseX = offsetX - this.scrollX;
         this.baseMouseY = offsetY - this.scrollY;
@@ -95,8 +95,9 @@ class Layer {
     }
 
     _doubleclick (e) {
+        let chart = this.parent;
         // Если двойной клик на шкалу цен
-        if (this.baseMouseX + this.baseScrollX > chart.offsetWidth - this.price_axe_width) {     
+        if (this.baseMouseX + this.baseScrollX > chart.offsetWidth - this.price_axe_width) {
             this.parent.layer.autosize = true;
         }
         this.draw();
@@ -104,16 +105,16 @@ class Layer {
     }
 
 
-    
+
     _mousemove(e, touch) {
-        e.preventDefault();   
-        event.cancelBubble = true;  
+        e.preventDefault();
+        event.cancelBubble = true;
         let chart = this.parent;
         let offsetX = e.offsetX * chart.ratio;
         let offsetY = e.offsetY * chart.ratio;
-          
+
         if (e.maxPointers && e.maxPointers > 1) return;
-        
+
 
         if (e.center) {
             let offset = this.offset(chart.linen);
@@ -121,44 +122,44 @@ class Layer {
             offsetY = (e.srcEvent.pageY - offset.top) * chart.ratio;
             //$('#debug').html(JSON.stringify(e.srcEvent.pageY, null, "  "));
         }
-        
+
         /*if (touch) {
             offsetX = (e.touches[0].pageX - e.touches[0].target.offsetLeft) * chart.ratio;
             offsetY = (e.touches[0].pageY - e.touches[0].target.offsetTop) * chart.ratio;
         }*/
-        
+
         this.mouseX = offsetX;
         this.mouseY = offsetY;
-        let timePanelHeight = 20;        
+        let timePanelHeight = 20;
         if (this.touchMode)
             timePanelHeight *= 2; //// Условно. А вообще нужно пробраться к теме и забрать оттуда мобильный скейл
 
         if (this.mousedowned) {
-            if (this.baseMouseX + this.baseScrollX <= chart.offsetWidth - this.price_axe_width && 
-                this.baseMouseY <= chart.offsetHeight - timePanelHeight) {     
+            if (this.baseMouseX + this.baseScrollX <= chart.offsetWidth - this.price_axe_width &&
+                this.baseMouseY <= chart.offsetHeight - timePanelHeight) {
                 this.scrollX = offsetX - this.baseMouseX;
                 this.scrollY = offsetY - this.baseMouseY;
             } else if (this.baseMouseX + this.baseScrollX > chart.offsetWidth - this.price_axe_width) {
                 this.parent.layer.autosize = false;
                 let h = chart.offsetHeight;
-                let start = Math.log2(100);                      
-                let delta = (Math.abs(Math.log2(100 + 100 / h * Math.abs(offsetY - this.baseMouseY)) ) - start) * 4 + 1;                    
-                if (offsetY - this.baseMouseY >= 0) 
-                    this.frameHeight = this.baseFrameHeight / delta;      
+                let start = Math.log2(100);
+                let delta = (Math.abs(Math.log2(100 + 100 / h * Math.abs(offsetY - this.baseMouseY)) ) - start) * 4 + 1;
+                if (offsetY - this.baseMouseY >= 0)
+                    this.frameHeight = this.baseFrameHeight / delta;
                 else
                     this.frameHeight = this.baseFrameHeight * delta;
                 if (this.frameHeight > this.config.maxFrameHeight)
                     this.frameHeight = this.config.maxFrameHeight;
-            } else {                
+            } else {
                 let oldWidth = this.frameWidth;
                 let w = chart.offsetWidth;
-                let start = Math.log2(100);                      
-                let delta = (Math.abs(Math.log2(100 + 100 / w * Math.abs(offsetX - this.baseMouseX - this.baseScrollX)) ) - start) * 4 + 1;                         
-                if (offsetX - this.baseMouseX - this.baseScrollX >= 0) 
-                    this.frameWidth = this.baseFrameWidth / delta;      
+                let start = Math.log2(100);
+                let delta = (Math.abs(Math.log2(100 + 100 / w * Math.abs(offsetX - this.baseMouseX - this.baseScrollX)) ) - start) * 4 + 1;
+                if (offsetX - this.baseMouseX - this.baseScrollX >= 0)
+                    this.frameWidth = this.baseFrameWidth / delta;
                 else
                     this.frameWidth = this.baseFrameWidth * delta;
-                
+
                 if (this.frameWidth < 0.5)
                     this.frameWidth = 0.5;
                 if (this.frameWidth > 150)
@@ -166,9 +167,9 @@ class Layer {
 
                 let diff = this.frameWidth - oldWidth;
                 //console.log(this.parent.layer.dataStartIndexOffset, this.frameNum)
-                this.scrollX = this.scrollX + diff * this.parent.layer.dataStartIndexOffset - diff / 2;    
+                this.scrollX = this.scrollX + diff * this.parent.layer.dataStartIndexOffset - diff / 2;
             }
-        }                          
+        }
         this.draw();
     }
 
@@ -178,9 +179,9 @@ class Layer {
         let chart = this.parent;
         this.mousedowned = false;
         this.now += this.scrollY / this.frameHeight * this.tick;
-        this.scrollY = 0;        
+        this.scrollY = 0;
 
-        //$(chart.linen).css('cursor', '');        
+        //$(chart.linen).css('cursor', '');
         //chart.linen.style.cursor = '';
         $(chart.linen).parent().removeClass('ac_chart_cur_n-resize ac_chart_cur_grabbing');
         this.draw();
@@ -200,11 +201,11 @@ class Layer {
     }
 
     _mousewheel (e) {
-        e.preventDefault();   
-        event.cancelBubble = true;        
-        
-        if (e.originalEvent) 
-            e = e.originalEvent;        
+        e.preventDefault();
+        event.cancelBubble = true;
+
+        if (e.originalEvent)
+            e = e.originalEvent;
 
         /*if (system.key_states[16]) {
             if (e.deltaY > 0)
@@ -219,7 +220,7 @@ class Layer {
 
             if (self.params.fieldHeight % 2 != 0)
                 self.params.fieldHeight -= e.deltaY > 0?1:-1;
-        } else {  */          
+        } else {  */
             let oldWidth = this.frameWidth;
             //let center = 0;
             //if (e.center)
@@ -232,9 +233,9 @@ class Layer {
                 else
                     this.frameWidth = this.frameWidth * 1.15;
             }
-            
-            
-                    
+
+
+
             if (this.frameWidth < 0.5)
                 this.frameWidth = 0.5;
             if (this.frameWidth > 150)
@@ -245,12 +246,12 @@ class Layer {
 
             //if (!system.key_states[17]) {
             let diff = this.frameWidth - oldWidth;
-                        
+
             this.scrollX = this.scrollX + diff * this.frameNum - diff / 2;
-            
+
             //}
-        
-        this.draw();        
+
+        this.draw();
         return false;
     }
 
@@ -259,7 +260,7 @@ class Layer {
     }
 
     _init () {
-        let chart = this.parent;     
+        let chart = this.parent;
         this.scrollX = -160;
         this.scrollY = 0;
         this.mouseX = -100;
@@ -269,12 +270,12 @@ class Layer {
         this.now = 0;
         this.baseFrameWidth = 0;
         this.baseFrameHeight = 0;
-        this.price_axe_width = 46;        
+        this.price_axe_width = 46;
 
         this.touchMode = chart.isTouchMode();
 
         if (this.touchMode)
-        {                
+        {
             var mc = new HAMMER.Manager(chart.linen);
 
             mc.add(new HAMMER.Pan({ threshold: 0, pointers: 0 }));
@@ -284,7 +285,7 @@ class Layer {
             mc.add(new HAMMER.Tap({ event: 'doubletap', taps: 2 }));
             mc.add(new HAMMER.Tap());
 
-                    
+
             mc.on("tap", (e) => { /* on tap */ } );
             mc.on("panstart", (e) => this._mousedown(e));
             mc.on("panmove", (e) => this._mousemove(e));
@@ -292,7 +293,7 @@ class Layer {
             mc.on("pinchstart", (e) => this._pinchStart(e));
             mc.on("pinch", (e) => this._mousewheel(e));
             mc.on("doubletap", (e) => this._doubleclick(e));
-        }        
+        }
 
 
         $(chart.linen)
@@ -303,20 +304,20 @@ class Layer {
             .mouseenter((e) => this._mouseenter(e))
             .dblclick((e)   => this._doubleclick(e))
             .on("wheel", (e) => this._mousewheel(e))
-            /*.on("touchstart", (e) => this._mousedown(e, true)) 
-            .on("touchmove", (e) => this._mousemove(e, true)) 
+            /*.on("touchstart", (e) => this._mousedown(e, true))
+            .on("touchmove", (e) => this._mousemove(e, true))
             .on("touchend", (e) => this._mouseup(e)) */
-            
+
     }
 
     draw (ctx) {
-        
+
         this.parent.layer.draw();
         /*let c = this.parent.linen;
-        let ctx = c.getContext("2d");         
+        let ctx = c.getContext("2d");
         ctx.clearRect(0, 0, c.width, c.height);
-        ctx.font = '14px "EXO 2"'; 
-    
+        ctx.font = '14px "EXO 2"';
+
         // Отрисовка курсора
         this.parent.crosshair.draw(ctx);*/
 
