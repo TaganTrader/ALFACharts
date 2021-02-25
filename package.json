@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "yarn run build -- --watch",
     "build": "webpack --mode production --config configs/webpack.prod.config.js -env.PLATFORM=production --env.VERSION=1",
-    "dev-serve": "webpack-dev-server --host 192.168.251.99 --port 8080 --mode development --open --config configs/webpack.base.config.js -env.PLATFORM=development --env.VERSION=1"
+    "dev-serve": "webpack-dev-server --host 127.0.0.1 --port 8080 --mode development --open --config configs/webpack.base.config.js -env.PLATFORM=development --env.VERSION=1"
   },
   "author": "ALFA",
   "license": "MIT",

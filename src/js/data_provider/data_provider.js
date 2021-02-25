@@ -107,7 +107,7 @@ class DataProvider {
 
     update() {
         if (!this.__p_needData && this.data.length > 3) {
-            this.__p_needData = true;            
+            this.__p_needData = true;
             let from = this.data[3].timestamp;
             let to = Math.floor(new Date().getTime() / 1000) + 5 * 60;
             // скорее всего заружены исторические данные
@@ -122,12 +122,12 @@ class DataProvider {
                         if (this.data[3 - i].timestamp === candles[i].timestamp) {
                             this.data[3 - i] = candles[i];
                             //console.log('Успешное обновление ', 3 - i);
-                        }                            
+                        }             
                     } else {
                         if (this.data[0].timestamp + 60 === candles[i].timestamp)
                             this.data.unshift(candles[i]);
                     }
-                }                
+                }
                 this.__p_needData = false;
             }).catch (() => {
                 this.__p_needData = false;

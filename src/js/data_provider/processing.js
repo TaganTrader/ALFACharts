@@ -18,7 +18,7 @@ class Processing
         let timestamp = Math.floor(new Date(params.timestamp).getTime() / 1000 / 60) * 60;                    
         let lastPrice = this.dataProvider.data[0].close;
         
-        //console.log(Math.floor(this.dataProvider.data[0].timestamp, timestamp, new Date(timestamp).getTime() / 1000 / 60) * 60)
+        // Если это таже свеча
         if (this.dataProvider.data[0].timestamp === timestamp) {            
             this.dataProvider.data[0].close = price;
             this.dataProvider.data[0].high = Math.max(this.dataProvider.data[0].high, price);
@@ -30,6 +30,7 @@ class Processing
             }
         }
 
+        // Появление новой свечи
         if (this.dataProvider.data[0].timestamp + 60 === timestamp) {
             this.dataProvider.data.unshift({
                 timestamp: timestamp,
