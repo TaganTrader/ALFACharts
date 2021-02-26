@@ -53,9 +53,9 @@ class Crosshair {
         ctx.textBaseline = "middle";
         let fontSize = 12;
         if (layer.touchMode)
-            ctx.font = (fontSize * theme.mobile.font_scale) + 'px "EXO 2"';
+            ctx.font = (fontSize * theme.mobile.font_scale) + 'px "Open Sans"';
         else
-            ctx.font = (fontSize) + 'px "EXO 2"';
+            ctx.font = (fontSize) + 'px "Open Sans"';
         ctx.fillStyle = theme.colors.crosshair_price;
 
 

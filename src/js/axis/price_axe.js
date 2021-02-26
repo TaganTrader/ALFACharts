@@ -78,9 +78,9 @@ class PriceAxe extends Axe {
 
         let fontSize = 12;
         if (this.layer.touchMode)
-            ctx.font = (fontSize * theme.mobile.font_scale) + 'px "EXO 2"';
+            ctx.font = (fontSize * theme.mobile.font_scale) + 'px "Open Sans"';
         else
-            ctx.font = (fontSize) + 'px "EXO 2"';
+            ctx.font = (fontSize) + 'px "Open Sans"';
 
         ctx.fillStyle = theme.colors.axe_texts;
         ctx.setLineDash([0]);
