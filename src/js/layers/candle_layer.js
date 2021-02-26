@@ -106,7 +106,7 @@ class CandleLayer {
 
         timestamp = Math.floor(timestamp / 1000 / 60) * 60;
 
-        let offset = (data[0].timestamp - timestamp) / 60;
+        let offset = (data[0].timestamp - timestamp) / 60 / (chart.config.timeframe?chart.config.timeframe:1);
         if (offset < 0) return null;
         if (offset >= data.length) return null;
         return data[offset];
