@@ -14,8 +14,8 @@ class PriceAxe extends Axe {
         let range = max - min;
         let divisions = pixel_height / pixel_spacing;
         let seg = range / divisions;
-        let gran = 0.00001;
-        let prev_gran = 0.000005;
+        let gran = 0.0000001;
+        let prev_gran = 0.00000005;
         let gran_factors = [2, 2.5, 2];
         let nextGran = function nextGran(current_value, i) {
             return current_value * gran_factors[i % 3];
