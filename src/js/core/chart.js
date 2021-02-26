@@ -35,6 +35,7 @@ function GetZoomLevel() {
 
 
 class ALFAChart extends EventEmitter {
+
     constructor (el_id, config) {
         super();
         if (typeof el_id === "string")
@@ -46,9 +47,15 @@ class ALFAChart extends EventEmitter {
         this.offsetWidth = 0;
         this.offsetHeight = 0;
 
+        this.timerId = 0;
+
         this.theme = new Theme(this.config.theme);
         this._init();
-        moment.locale(config.locale);
+        this.changeLocale(config.locale);
+    }
+
+    changeLocale (locale) {
+        moment.locale(locale);
     }
 
     _init () {
@@ -67,8 +74,6 @@ class ALFAChart extends EventEmitter {
 
         //let scale = GetZoomLevel();
 
-
-
         this.chart.append(this.canvas);
         this.chart.append(this.linen);
         this.area.append(this.chart);
@@ -82,7 +87,7 @@ class ALFAChart extends EventEmitter {
         this.crosshair = new Crosshair(this);
 
         this._autorefresh()
-        setInterval(() => { this._autorefresh() }, 300);
+        this.timerId = setInterval(() => { this._autorefresh() }, 300);
     }
 
     clear () {
@@ -121,6 +126,13 @@ class ALFAChart extends EventEmitter {
 
     _autorefresh() {
         this.layer.draw();
+    }
+
+    destroy () {
+        if (this.timerId) {
+            clearInterval(this.timerId);
+        }
+        this.el.innerHTML = "";
     }
 }
 
