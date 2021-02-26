@@ -148,8 +148,9 @@ class Layer {
                     this.frameHeight = this.baseFrameHeight / delta;
                 else
                     this.frameHeight = this.baseFrameHeight * delta;
-                if (this.frameHeight > this.config.maxFrameHeight)
-                    this.frameHeight = this.config.maxFrameHeight;
+                //// bug, don't work with price 0.0000xxx
+                // if (this.frameHeight > this.config.maxFrameHeight)
+                //     this.frameHeight = this.config.maxFrameHeight;
             } else {
                 let oldWidth = this.frameWidth;
                 let w = chart.offsetWidth;
