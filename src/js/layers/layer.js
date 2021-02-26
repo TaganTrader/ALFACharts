@@ -100,6 +100,14 @@ class Layer {
         if (this.baseMouseX + this.baseScrollX > chart.offsetWidth - this.price_axe_width) {
             this.parent.layer.autosize = true;
         }
+        let timePanelHeight = 20;
+        if (this.touchMode)
+            timePanelHeight *= 2;
+        if (this.baseMouseX + this.baseScrollX <= chart.offsetWidth - this.price_axe_width &&
+            this.baseMouseY > chart.offsetHeight - timePanelHeight) {
+            this.frameWidth = chart.config.frameWidth?chart.config.frameWidth:8;
+            this.scrollX = -this.price_axe_width - this.frameWidth;
+        }
         this.draw();
         return false;
     }
