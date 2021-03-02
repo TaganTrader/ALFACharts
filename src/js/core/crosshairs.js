@@ -79,6 +79,10 @@ class Crosshair {
             else
                 ctx.font = (fontSize) + 'px "EXO 2"';
 
+            if (chart.layer.candleIndexAtCursor !== frameNum) {
+                chart.emit("candle", chart.dataProvider.data[frameNum]);
+            }
+            chart.layer.candleIndexAtCursor = frameNum;
             text = moment(chart.dataProvider.data[frameNum].timestamp * 1000).format("DD MMM YY   HH:mm");
             ctx.fillText(text, x, chart.offsetHeight - (layer.touchMode?15:9));
         }

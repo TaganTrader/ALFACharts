@@ -150,7 +150,6 @@ class PriceAxe extends Axe {
             let timefrom_ts = zero_timestamp + -1 * (need_candle * curr_timeframe);
             let timeto_ts = timefrom_ts - (Math.floor((w + max_width) / frameWidth)) * curr_timeframe;
 
-            console.log(new Date(timefrom_ts * 1000), new Date(timeto_ts * 1000));
             div = this.getTimeScale(timeto_ts / 60, timefrom_ts / 60, w / 2, 80) * 60;
 
             let div_tf = 3 * 60;

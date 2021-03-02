@@ -45,6 +45,7 @@ class CandleLayer {
         this.positions = new Positions(this, this.dataProvider.positions);
         this.points = new Points(this, this.dataProvider.points);
         this.dataStartIndexOffset = 0;
+        this.candleIndexAtCursor = 0;
     }
 
     extremums (from, to) {
