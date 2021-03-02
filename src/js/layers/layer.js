@@ -237,13 +237,13 @@ class Layer {
             if (e.scale) {
                 this.frameWidth = this._baseFrameWidth * e.scale;
             } else {
-                if (e.deltaY > 0)
-                    this.frameWidth = this.frameWidth / 1.15;
-                else
-                    this.frameWidth = this.frameWidth * 1.15;
+                if (!e.shiftKey && e.deltaX == 0 && e.deltaY !== 0) {
+                    if (e.deltaY > 0)
+                        this.frameWidth = this.frameWidth / 1.15;
+                    else
+                        this.frameWidth = this.frameWidth * 1.15;
+                }
             }
-
-
 
             if (this.frameWidth < 0.5)
                 this.frameWidth = 0.5;
@@ -256,7 +256,10 @@ class Layer {
             //if (!system.key_states[17]) {
             let diff = this.frameWidth - oldWidth;
 
-            this.scrollX = this.scrollX + diff * this.frameNum - diff / 2;
+            if (e.shiftKey && e.deltaX) {
+                this.scrollX -= e.deltaX;
+            } else
+                this.scrollX = this.scrollX + diff * this.frameNum - diff / 2;
 
             //}
 
