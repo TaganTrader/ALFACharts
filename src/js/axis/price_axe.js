@@ -129,7 +129,7 @@ class PriceAxe extends Axe {
 
         let data = this.parent.dataProvider.data;
         let data_offset = this.parent.dataProvider.offset;
-        let curr_timeframe = this.parent.dataProvider.timeframe;
+        let curr_timeframe = this.parent.parent.config.timeframe ? this.parent.parent.config.timeframe * 60 : this.parent.dataProvider.timeframe;
 
         if (data.length > 0)
         {
