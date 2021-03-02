@@ -79,7 +79,7 @@ class Crosshair {
             else
                 ctx.font = (fontSize) + 'px "EXO 2"';
 
-            if (chart.layer.candleIndexAtCursor !== frameNum) {
+            if (chart.layer.candleIndexAtCursor !== frameNum || frameNum == 0) {
                 chart.emit("candle", chart.dataProvider.data[frameNum]);
             }
             chart.layer.candleIndexAtCursor = frameNum;
