@@ -278,7 +278,7 @@ class CandleLayer {
                 ctx.fillStyle = theme.colors.candles.bull.price_text;
             else
                 ctx.fillStyle = theme.colors.candles.bear.price_text;
-            let text = candle.close.toFixed(chart.config.decimals);
+            let text = candle.close.toFixed(chart.config.decimals?chart.config.decimals:2);
             ctx.fillText(text, w - this.layer.price_axe_width / 2, y);
         }
     }

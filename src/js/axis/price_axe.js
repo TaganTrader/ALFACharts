@@ -150,7 +150,7 @@ class PriceAxe extends Axe {
             let timefrom_ts = zero_timestamp + -1 * (need_candle * curr_timeframe);
             let timeto_ts = timefrom_ts - (Math.floor((w + max_width) / frameWidth)) * curr_timeframe;
 
-
+            console.log(new Date(timefrom_ts * 1000), new Date(timeto_ts * 1000));
             div = this.getTimeScale(timeto_ts / 60, timefrom_ts / 60, w / 2, 80) * 60;
 
             let div_tf = 3 * 60;
@@ -204,6 +204,7 @@ class PriceAxe extends Axe {
             //timefrom = Math.floor(timefrom / div) * div;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
+            iter = 0;
             for (let t = timeto_ts; t <= timefrom_ts; t += div) {
                 iter ++;
                 if (iter > 100) break;
@@ -219,7 +220,8 @@ class PriceAxe extends Axe {
                 ctx.lineTo(Math.round(scrollX + x) + .5, h);
                 ctx.stroke();
 
-                let text = moment(t * 1000 * (this.parent.parent.config.timeframe?this.parent.parent.config.timeframe:1)).format("HH:mm");
+                let tf = this.parent.parent.config.timeframe ? this.parent.parent.config.timeframe : 5;
+                let text = moment((t - offset * 60 * (tf - 1)) * 1000).format("HH:mm");
                 ctx.fillText(text, x + scrollX, h - (this.layer.touchMode?15:9), max_width);
             }
         }
