@@ -220,7 +220,7 @@ class PriceAxe extends Axe {
                 ctx.lineTo(Math.round(scrollX + x) + .5, h);
                 ctx.stroke();
 
-                let tf = this.parent.parent.config.timeframe ? this.parent.parent.config.timeframe : 5;
+                let tf = this.parent.parent.config.timeframe ? this.parent.parent.config.timeframe : 1;
                 let text = moment((t - offset * 60 * (tf - 1)) * 1000).format("HH:mm");
                 ctx.fillText(text, x + scrollX, h - (this.layer.touchMode?15:9), max_width);
             }
