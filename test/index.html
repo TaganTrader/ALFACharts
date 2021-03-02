@@ -29,9 +29,9 @@
         }
     </style>
 </head>
-<body>    
+<body>
     <pre id="debug"></pre>
-    <div id="ALFAChartDemo"></div>    
+    <div id="ALFAChartDemo"></div>
 
     <script src="/assets/app.js"></script>
 
@@ -47,7 +47,7 @@
                         candles = JSON.parse(data);
 
                     } catch (e) {
-                        /*if (cycle)	
+                        /*if (cycle)
                             setTimeout(function () { updateData(true) }, 300);*/
                         return;
                     }
@@ -122,7 +122,7 @@
 
 
             function updateData2(cycle) {
-                $.get('https://ds1.texer.org:8443/', function (data) {                                                                                
+                $.get('https://ds1.texer.org:8443/', function (data) {
                     //chart.dataProvider.data = data;
                     chart.layer.orders.data = [];
                     chart.layer.positions.data = [{
@@ -138,7 +138,7 @@
         //setInterval(() => { updateData2(true); }, 5000);
 
         var chart = new ALFAChart("ALFAChartDemo", {
-            theme: "DefaultDark",            
+            theme: "DefaultDark",
         });
     </script>
 

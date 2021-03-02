@@ -308,7 +308,16 @@ class CandleLayer {
         ctx.fillRect(0, 0, c.width, c.height);
 
         let theme = this.parent.theme;
+
         this.axis.price_axe.draw(ctx, theme);
+
+        if (this.parent.config.labels) {
+            ctx.font = (this.parent.config.labels.fontSize?this.parent.config.labels.fontSize:70) + 'px ' + (this.parent.config.labels.fontName?this.parent.config.labels.fontName:'"EXO 2"');
+            ctx.fillStyle = (this.parent.config.labels.color?this.parent.config.labels.color:"rgba(0, 0, 0, 0.15)");
+            ctx.fillText(this.parent.config.labels.label1_text, this.width/2, this.height/2 - (this.parent.config.labels.offset?this.parent.config.labels.offset:60));
+            ctx.fillText(this.parent.config.labels.label2_text, this.width/2, this.height/2 + (this.parent.config.labels.offset?this.parent.config.labels.offset:60));
+        }
+
         this.draw_candles(ctx, theme);
         this.orders.draw(ctx, theme);
         this.positions.draw(ctx, theme);
