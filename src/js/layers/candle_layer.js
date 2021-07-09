@@ -50,6 +50,7 @@ class CandleLayer {
 
     extremums (from, to) {
         let data = this.dataProvider.data;
+        let orders = this.dataProvider.orders;
         if (from < 0) {
             from = 0;
         }
@@ -61,6 +62,12 @@ class CandleLayer {
             min = Math.min(data[i].low, min);
             max = Math.max(data[i].high, max);
         }
+        // ORDERS INCLUDE
+        for (let i = 0; i < orders.length; i++) {
+            min = Math.min(orders[i].price, min);
+            max = Math.min(orders[i].price, min);
+        }
+
 
         return { min, max }
     }

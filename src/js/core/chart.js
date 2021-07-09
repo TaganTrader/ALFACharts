@@ -106,7 +106,9 @@ class ALFAChart extends EventEmitter {
         this.touchMode = this.isTouchMode();
 
         this.ratio = window.devicePixelRatio * 1;
-        if (this.ratio == 2) this.touchMode = true;
+
+        this.isMAC = !!(navigator.userAgent.toLowerCase().match(/(Macintosh|Mac OS X)/));
+
         if (this.touchMode)
             this.ratio = this.theme.mobile.scale;
 
