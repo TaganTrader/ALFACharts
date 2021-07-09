@@ -65,7 +65,7 @@ class CandleLayer {
         // ORDERS INCLUDE
         for (let i = 0; i < orders.length; i++) {
             min = Math.min(orders[i].price, min);
-            max = Math.min(orders[i].price, min);
+            max = Math.max(orders[i].price, max);
         }
 
 
