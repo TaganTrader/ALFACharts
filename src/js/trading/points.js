@@ -62,7 +62,7 @@ class Points
         else {
             theme.mobile.scale = 1;
             theme.mobile.font_scale = 1;
-            ctx.font = (fontSize * (this.parent.parent.ratio * .65)) + 'px "EXO 2"';
+            ctx.font = (fontSize) + 'px "EXO 2"';
         }
 
         let labelHeight = 20;

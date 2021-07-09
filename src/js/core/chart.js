@@ -106,6 +106,7 @@ class ALFAChart extends EventEmitter {
         this.touchMode = this.isTouchMode();
 
         this.ratio = window.devicePixelRatio * 1;
+        if (this.ratio == 2) this.touchMode = true;
         if (this.touchMode)
             this.ratio = this.theme.mobile.scale;
 

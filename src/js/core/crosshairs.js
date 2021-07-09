@@ -77,7 +77,7 @@ class Crosshair {
             if (layer.touchMode)
                 ctx.font = (fontSize * theme.mobile.font_scale) + 'px "EXO 2"';
             else
-                ctx.font = (fontSize * (this.parent.parent.ratio * .65)) + 'px "EXO 2"';
+                ctx.font = (fontSize) + 'px "EXO 2"';
 
             if (chart.layer.candleIndexAtCursor !== frameNum || frameNum == 0) {
                 chart.emit("candle", chart.dataProvider.data[frameNum]);

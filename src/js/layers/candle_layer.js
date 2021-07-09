@@ -273,7 +273,7 @@ class CandleLayer {
             if (this.layer.touchMode)
                 ctx.font = (fontSize * theme.mobile.font_scale) + 'px "EXO 2"';
             else
-                ctx.font = (fontSize * (this.parent.parent.ratio * .65)) + 'px "EXO 2"';
+                ctx.font = (fontSize) + 'px "EXO 2"';
 
             if (candle.close >= candle.open)
                 ctx.fillStyle = theme.colors.candles.bull.price_text;
