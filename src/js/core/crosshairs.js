@@ -55,7 +55,7 @@ class Crosshair {
         if (layer.touchMode)
             ctx.font = (fontSize * theme.mobile.font_scale) + 'px "Open Sans"';
         else
-            ctx.font = (fontSize * (this.parent.parent.ratio * .65)) + 'px "Open Sans"';
+            ctx.font = (fontSize) + 'px "Open Sans"';
         ctx.fillStyle = theme.colors.crosshair_price;
 
 
