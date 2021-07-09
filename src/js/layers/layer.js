@@ -237,12 +237,16 @@ class Layer {
             if (e.scale) {
                 this.frameWidth = this._baseFrameWidth * e.scale;
             } else {
-                if (!e.shiftKey && e.deltaX == 0 && e.deltaY !== 0) {
+                if (!e.altKey && !e.shiftKey && e.deltaX == 0 && e.deltaY !== 0) {
+                    //console.log('last', chart.last);
+                    //console.log('next', e);
+                    //chart.last = {};
                     if (e.deltaY > 0)
                         this.frameWidth = this.frameWidth / 1.15;
                     else
                         this.frameWidth = this.frameWidth * 1.15;
                 }
+                //chart.last = e;
             }
 
             if (this.frameWidth < 0.5)
