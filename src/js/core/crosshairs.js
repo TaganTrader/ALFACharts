@@ -55,7 +55,7 @@ class Crosshair {
         if (layer.touchMode)
             ctx.font = (fontSize * theme.mobile.font_scale) + 'px "Open Sans"';
         else
-            ctx.font = (fontSize) + 'px "Open Sans"';
+            ctx.font = (fontSize * (this.parent.parent.ratio * .65)) + 'px "Open Sans"';
         ctx.fillStyle = theme.colors.crosshair_price;
 
 
@@ -77,7 +77,7 @@ class Crosshair {
             if (layer.touchMode)
                 ctx.font = (fontSize * theme.mobile.font_scale) + 'px "EXO 2"';
             else
-                ctx.font = (fontSize) + 'px "EXO 2"';
+                ctx.font = (fontSize * (this.parent.parent.ratio * .65)) + 'px "EXO 2"';
 
             if (chart.layer.candleIndexAtCursor !== frameNum || frameNum == 0) {
                 chart.emit("candle", chart.dataProvider.data[frameNum]);

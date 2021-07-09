@@ -30,7 +30,7 @@ class Positions
         else {
             theme.mobile.scale = 1;
             theme.mobile.font_scale = 1;
-            ctx.font = (fontSize) + 'px "EXO 2"';
+            ctx.font = (fontSize * (this.parent.parent.ratio * .65)) + 'px "EXO 2"';
         }
 
         let labelHeight = 20;
@@ -103,7 +103,7 @@ class Positions
             if (layer.layer.touchMode)
                 ctx.font = (fontSize * theme.mobile.font_scale) + 'px "EXO 2"';
             else
-                ctx.font = (fontSize) + 'px "EXO 2"';
+                ctx.font = (fontSize * (this.parent.parent.ratio * .65)) + 'px "EXO 2"';
             ctx.fillStyle = color
             ctx.fillRect(w, Math.round(y - labelHeight/2 + scrollY), -layer.layer.price_axe_width, labelHeight);
             if (positions[i].currentQty > 0)
