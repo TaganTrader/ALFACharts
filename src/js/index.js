@@ -2,6 +2,7 @@ import ALFAChart from "./core/chart"
 
 moment.locale('en-EN');
 
+window.moment = moment;
 window.ALFAChart = ALFAChart;
 
 
